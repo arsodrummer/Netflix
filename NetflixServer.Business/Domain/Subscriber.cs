@@ -1,6 +1,6 @@
-﻿namespace NetflixServer.Models.Requests
+﻿namespace NetflixServer.Business.Domain
 {
-    public class NewSubscriberRequest
+    public class Subscriber
     {
         public string Email { get; set; }
 

@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using NetflixServer.Api.Mapper;
+using NetflixServer.Business.Interfaces;
 using NetflixServer.Business.Models.Responses;
 using NetflixServer.Models.Queries;
 using NetflixServer.Models.Requests;
@@ -10,16 +12,21 @@ namespace NetflixServer.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class SubscriptionController : ControllerBase
+    public class SubscriberController : ControllerBase
     {
-        public SubscriptionController()
+        private ISubscriberService _subscriptionService;
+
+        public SubscriberController(ISubscriberService subscriptionService)
         {
+            _subscriptionService = subscriptionService;
         }
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         public async Task<IActionResult> PostAsync([FromBody] NewSubscriberRequest newSubscriberRequest, CancellationToken cancellationToken)
         {
+            var subscriber = newSubscriberRequest.ToSubscriber();
+            await _subscriptionService.CreateSubscriberAsync(subscriber, cancellationToken);
             return NoContent();
         }
 

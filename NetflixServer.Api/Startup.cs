@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using NetflixServer.Api.Extensions;
 
 namespace NetflixServer
 {
@@ -19,7 +20,7 @@ namespace NetflixServer
             services
                 //.AddInfrastructureServices(Configuration)
                 //.AddApiServices()
-                //.AddDatabaseServices(Configuration)
+                .AddDatabaseServices(Configuration)
                 //.AddBusinessServices(Configuration)
                 //.AddApiHost(options =>
                 //{
