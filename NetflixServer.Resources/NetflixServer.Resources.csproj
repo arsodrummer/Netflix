@@ -1,9 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 	<PropertyGroup>
-		<TargetFramework>netcoreapp3.1</TargetFramework>
+		<TargetFramework>net48</TargetFramework>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<OutputPath>bin\</OutputPath>
 		<OutputType>Library</OutputType>
+		<NoDefaultLaunchSettingsFile>true</NoDefaultLaunchSettingsFile>
 	</PropertyGroup>
 	<ItemGroup>
 	  <PackageReference Include="PetaPoco.Compiled" Version="6.0.480" />
