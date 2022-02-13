@@ -21,7 +21,7 @@ namespace NetflixServer
                 //.AddInfrastructureServices(Configuration)
                 //.AddApiServices()
                 .AddDatabaseServices(Configuration)
-                //.AddBusinessServices(Configuration)
+                .AddBusinessServices(Configuration)
                 //.AddApiHost(options =>
                 //{
                 //    options.Name = "Netflix";

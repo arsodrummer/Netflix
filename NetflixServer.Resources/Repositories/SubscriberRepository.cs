@@ -35,6 +35,6 @@ namespace NetflixServer.Resources.Repositories
         }
 
         private Task<long> GetNextSequenceValueAsync() =>
-            _netflixDbService.ExecuteScalarAsync<long>(new Sql($"SELECT SUBSCRIBER.NEXTVAL FROM DUAL"));
+            _netflixDbService.ExecuteScalarAsync<long>(new Sql($"SELECT current_value FROM sys.sequences WHERE name = 'SUBSCRIBER_SEQ'"));
     }
 }

@@ -4,3 +4,11 @@
     EMAIL varchar(255) NOT NULL,
     USER_NAME varchar(255)
 );
+
+CREATE SEQUENCE SUBSCRIBER_SEQ
+    as int
+    START WITH 1
+    INCREMENT BY 1
+    MINVALUE 1
+    NO MAXVALUE
+    NO CACHE;

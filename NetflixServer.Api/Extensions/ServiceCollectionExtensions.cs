@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using NetflixServer.Business.Interfaces;
+using NetflixServer.Business.Services;
 using NetflixServer.Resources.Repositories;
 using NetflixServer.Resources.Services;
 using PetaPoco;
@@ -31,5 +33,8 @@ namespace NetflixServer.Api.Extensions
                         .UsingIsolationLevel(IsolationLevel.ReadCommitted)
                         .UsingCommandExecuted((sender, args) => { logger.LogInformation($"{args.Command.CommandText}"); });
                 });
+
+        public static IServiceCollection AddBusinessServices(this IServiceCollection services, IConfiguration configuration) =>
+            services.AddScoped<ISubscriberService, SubscriberService>();
     }
 }
