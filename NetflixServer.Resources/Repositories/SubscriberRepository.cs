@@ -23,9 +23,9 @@ namespace NetflixServer.Resources.Repositories
 
                 await _netflixDbService.InsertAsync(new SubscriberEntity()
                 {
+                    SubscriberId = sequenceValue,
                     Email = email,
                     UserName = userName,
-                    SubscriberId = sequenceValue,
                 });
             }
             catch (Exception ex)
