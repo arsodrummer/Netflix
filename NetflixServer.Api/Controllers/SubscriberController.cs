@@ -33,9 +33,14 @@ namespace NetflixServer.Controllers
         [HttpGet]
         [Route("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetByIdAsync([FromQuery] GetSubscriberQuery getSubscriberQuery, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetByIdAsync([FromRoute] GetSubscriberQuery getSubscriberQuery, CancellationToken cancellationToken)
         {
-            return Ok(new SubscriberByIdResponse());
+            var response = await _subscriptionService.GetSubscriberByIdAsync(getSubscriberQuery.Id, cancellationToken);
+
+            if (response == null)
+                return NotFound();
+
+            return Ok(response);
         }
 
         [HttpPatch]
