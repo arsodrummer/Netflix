@@ -34,7 +34,7 @@ namespace NetflixServer.Resources.Repositories
             }
         }
 
-        public async Task<SubscriberEntity> GetSubscriberByIdAsync(string subscriberId)
+        public async Task<SubscriberEntity> GetSubscriberByIdAsync(long subscriberId)
         {
             try
             {
@@ -46,7 +46,21 @@ namespace NetflixServer.Resources.Repositories
             }
         }
 
+        public async Task UpdateSubscriberByIdAsync(SubscriberEntity subscriberEntity)
+        {
+            try
+            {
+                //await _netflixDbService.UpdateAsync(subscriberEntity);
+                await _netflixDbService.ExecuteAsync(new Sql($"UPDATE SUBSCRIBER SET ID_SUBSCRIPTION_PLAN = '{subscriberEntity.SubscriptionPlanId}' WHERE ID_SUBSCRIBER = '{subscriberEntity.SubscriberId}'"));
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
         private Task<long> GetNextSequenceValueAsync() =>
-            _netflixDbService.ExecuteScalarAsync<long>(new Sql($"SELECT current_value FROM sys.sequences WHERE name = 'SUBSCRIBER_SEQ'"));
+            _netflixDbService.ExecuteScalarAsync<long>(new Sql($"SELECT NEXT VALUE FOR SUBSCRIBER_SEQ"));
     }
 }

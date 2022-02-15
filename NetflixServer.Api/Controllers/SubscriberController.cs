@@ -44,10 +44,14 @@ namespace NetflixServer.Controllers
         }
 
         [HttpPatch]
-        [Route("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> PatchByIdAsync([FromBody] UpdateSubscriberRequest updateSubscriberRequest, CancellationToken cancellationToken)
         {
+            var response = await _subscriptionService.UpdateSubscriberByIdAsync(updateSubscriberRequest.SubscriberId, updateSubscriberRequest.SubscriptionPlanId, cancellationToken);
+
+            if (response == null)
+                return BadRequest();
+
             return NoContent();
         }
     }

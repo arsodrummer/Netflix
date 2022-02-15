@@ -2,6 +2,6 @@
 {
     public class GetSubscriberQuery
     {
-        public string Id { get; set; }
+        public long Id { get; set; }
     }
 }

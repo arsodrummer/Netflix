@@ -19,5 +19,18 @@ namespace NetflixServer.Business.Services
         {
             await _subscriptionPlanRepository.InsertSubscriptionPlanAsync(subscriptionPlan.Name, subscriptionPlan.Price, subscriptionPlan.Description);
         }
+
+        public async Task<SubscriptionPlan> GetSubscriptionPlanByIdAsync(long subscriptionPlanId, CancellationToken cancellationToken)
+        {
+            var subscriptionPlanEntity = await _subscriptionPlanRepository.GetSubscriptionPlanByIdAsync(subscriptionPlanId);
+            
+            return new SubscriptionPlan
+            {
+                SubscriptionPlanId = subscriptionPlanEntity.SubscriptionPlanId,
+                Description = subscriptionPlanEntity.Description,
+                Name = subscriptionPlanEntity.Name,
+                Price = subscriptionPlanEntity.Price,
+            };
+        }
     }
 }

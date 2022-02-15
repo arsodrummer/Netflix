@@ -9,7 +9,7 @@ namespace NetflixServer.Resources.Entities
         public long SubscriberId { get; set; }
 
         [Column(Name = "ID_SUBSCRIPTION_PLAN")]
-        public int? SubscriptionPlanId { get; set; }
+        public long? SubscriptionPlanId { get; set; }
 
         [Column(Name = "EMAIL")]
         public string Email { get; set; }

@@ -35,7 +35,19 @@ namespace NetflixServer.Resources.Repositories
             }
         }
 
+        public async Task<SubscriptionPlanEntity> GetSubscriptionPlanByIdAsync(long subscriptionPlanId)
+        {
+            try
+            {
+                return await _netflixDbService.GetFirstOrDefaultAsync<SubscriptionPlanEntity>(new Sql($"SELECT * FROM SUBSCRIPTION_PLAN WHERE ID_SUBSCRIPTION_PLAN = '{subscriptionPlanId}'"));
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         private Task<long> GetNextSequenceValueAsync() =>
-            _netflixDbService.ExecuteScalarAsync<long>(new Sql($"SELECT current_value FROM sys.sequences WHERE name = 'SUBSCRIPTION_PLAN_SEQ'"));
+            _netflixDbService.ExecuteScalarAsync<long>(new Sql($"SELECT NEXT VALUE FOR SUBSCRIPTION_PLAN_SEQ"));
     }
 }

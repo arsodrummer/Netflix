@@ -2,6 +2,10 @@
 {
     public class SubscriberByIdResponse
     {
+        public long SubscriberId { get; set; }
+
+        public long? SubscriptionPlanId { get; set; }
+
         public string Email { get; set; }
 
         public string UserName { get; set; }
