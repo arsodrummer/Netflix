@@ -30,13 +30,18 @@ namespace NetflixServer.Controllers
             return NoContent();
         }
 
-        //[HttpGet]
-        //[Route("{id}")]
-        //[ProducesResponseType(StatusCodes.Status200OK)]
-        //public async Task<IActionResult> GetByIdAsync([FromQuery] GetSubscriberQuery getSubscriberQuery, CancellationToken cancellationToken)
-        //{
-        //    return Ok(new SubscriberByIdResponse());
-        //}
+        [HttpGet]
+        [Route("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetByIdAsync([FromRoute] GetSubscriberQuery getSubscriberQuery, CancellationToken cancellationToken)
+        {
+            var response = await _subscriptionPlanService.GetSubscriptionPlanByIdAsync(getSubscriberQuery.Id, cancellationToken);
+
+            if (response == null)
+                return NotFound();
+
+            return Ok(response);
+        }
 
         //[HttpPatch]
         //[Route("{id}")]

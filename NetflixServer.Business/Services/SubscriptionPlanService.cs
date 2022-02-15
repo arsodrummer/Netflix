@@ -23,7 +23,12 @@ namespace NetflixServer.Business.Services
         public async Task<SubscriptionPlan> GetSubscriptionPlanByIdAsync(long subscriptionPlanId, CancellationToken cancellationToken)
         {
             var subscriptionPlanEntity = await _subscriptionPlanRepository.GetSubscriptionPlanByIdAsync(subscriptionPlanId);
-            
+
+            if (subscriptionPlanEntity == null)
+            {
+                return null;
+            }
+
             return new SubscriptionPlan
             {
                 SubscriptionPlanId = subscriptionPlanEntity.SubscriptionPlanId,
