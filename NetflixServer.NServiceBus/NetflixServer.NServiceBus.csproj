@@ -15,4 +15,8 @@
 		<PackageReference Include="NServiceBus.Transport.SqlServer" Version="6.*" />
 	</ItemGroup>
 
+	<ItemGroup>
+		<ProjectReference Include="..\NetflixServer.Shared\NetflixServer.Shared.csproj" />
+	</ItemGroup>
+
 </Project>

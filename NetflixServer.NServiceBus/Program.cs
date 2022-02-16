@@ -24,9 +24,13 @@ namespace NetflixServer.NServiceBus
             {
                 var connection = "Server=localhost,1433;Initial Catalog=master;User ID=sa;Password=_Netflix_123456;MultipleActiveResultSets=True;Connection Timeout=30;";
                 var endpointConfiguration = new EndpointConfiguration("NServiceBus");
+                endpointConfiguration.SendFailedMessagesTo("error");
+                endpointConfiguration.AuditProcessedMessagesTo("audit");
+                endpointConfiguration.EnableInstallers();
+                
                 var transport = endpointConfiguration.UseTransport<SqlServerTransport>();
                 transport.ConnectionString(connection);
-                //transport.DefaultSchema("receiver");
+                transport.DefaultSchema("receiver");
                 transport.UseSchemaForQueue("error", "dbo");
                 transport.UseSchemaForQueue("audit", "dbo");
                 transport.Transactions(TransportTransactionMode.SendsAtomicWithReceive);
@@ -37,7 +41,8 @@ namespace NetflixServer.NServiceBus
                 persistence.ConnectionBuilder(() => new SqlConnection(connection));
 
                 //endpointConfiguration.DefineCriticalErrorAction(OnCriticalError);
-                endpointConfiguration.EnableInstallers("sa");
+                SqlHelper.CreateSchema(connection, "receiver");
+
                 return endpointConfiguration;
             });
 
