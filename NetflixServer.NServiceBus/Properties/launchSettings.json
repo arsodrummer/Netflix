@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "NetflixServer.NServiceBus": {
+      "commandName": "Project",
+      "commandLineArgs": "--console"
+    }
+  }
+}

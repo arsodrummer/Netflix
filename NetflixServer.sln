@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetflixServer.DbUp", "Netfl
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetflixServer.Resources", "NetflixServer.Resources\NetflixServer.Resources.csproj", "{A8E77482-76D0-46E5-AB66-CA0B2CCEE6B2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetflixServer.Api", "NetflixServer.Api\NetflixServer.Api.csproj", "{590DACE2-FEBF-4FE8-978D-0841BFBD2C9A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetflixServer.Api", "NetflixServer.Api\NetflixServer.Api.csproj", "{590DACE2-FEBF-4FE8-978D-0841BFBD2C9A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetflixServer.NServiceBus", "NetflixServer.NServiceBus\NetflixServer.NServiceBus.csproj", "{44BA0509-AACB-4C15-967F-8D23B447BB00}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{590DACE2-FEBF-4FE8-978D-0841BFBD2C9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{590DACE2-FEBF-4FE8-978D-0841BFBD2C9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{590DACE2-FEBF-4FE8-978D-0841BFBD2C9A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{44BA0509-AACB-4C15-967F-8D23B447BB00}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{44BA0509-AACB-4C15-967F-8D23B447BB00}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{44BA0509-AACB-4C15-967F-8D23B447BB00}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{44BA0509-AACB-4C15-967F-8D23B447BB00}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
