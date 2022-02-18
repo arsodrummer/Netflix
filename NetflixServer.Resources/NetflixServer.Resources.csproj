@@ -4,8 +4,11 @@
 		<IsPackable>false</IsPackable>
 		<OutputType>Library</OutputType>
 	</PropertyGroup>
+	
 	<ItemGroup>
 		<PackageReference Include="PetaPoco.Compiled" Version="6.0.480" />
 		<PackageReference Include="System.Data.SqlClient" Version="4.8.0" />
+		<PackageReference Include="NServiceBus" Version="7.5.0" />
 	</ItemGroup>
+	
 </Project>

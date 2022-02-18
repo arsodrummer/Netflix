@@ -2,8 +2,12 @@
 using NetflixServer.Business.Interfaces;
 using NetflixServer.Business.Models.Responses;
 using NetflixServer.Resources.Repositories;
+using NetflixServer.Resources.Services;
+using NetflixServer.Shared;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
+
 
 namespace NetflixServer.Business.Services
 {
@@ -11,16 +15,28 @@ namespace NetflixServer.Business.Services
     {
         public SubscriberRepository _subscriberRepository;
         public SubscriptionPlanRepository _subscriptionPlanRepository;
+        public MessageService _messageService;
 
-        public SubscriberService(SubscriberRepository subscriberRepository, SubscriptionPlanRepository subscriptionPlanRepository)
+        public SubscriberService(SubscriberRepository subscriberRepository, SubscriptionPlanRepository subscriptionPlanRepository, MessageService messageService)
         {
             _subscriberRepository = subscriberRepository;
             _subscriptionPlanRepository = subscriptionPlanRepository;
+            _messageService = messageService;
         }
 
         public async Task CreateSubscriberAsync(Subscriber subscriber, CancellationToken cancellationToken)
         {
             await _subscriberRepository.InsertSubscriberAsync(subscriber.Email, subscriber.UserName);
+
+            await _messageService
+                    .SendAsync("NServiceBus", 
+                        new NotificationCommand
+                        {
+                            Id = 999,
+                            Email = subscriber.Email,
+                            Content = "The new subscriber has been created!",
+                            UserName = subscriber.UserName,
+                        });
         }
 
         public async Task<SubscriberByIdResponse> GetSubscriberByIdAsync(long subscriberId, CancellationToken cancellationToken)
@@ -57,6 +73,19 @@ namespace NetflixServer.Business.Services
             subscriber.SubscriptionPlanId = subscriptionPlanId;
 
             await _subscriberRepository.UpdateSubscriberByIdAsync(subscriber);
+
+            await _messageService
+                    .SendAsync("NServiceBus",
+                        new NotificationCommand
+                        {
+                            Id = 999,
+                            Email = subscriber.Email,
+                            Content = "The new subscription plan has been activated!",
+                            UserName = subscriber.UserName,
+                            SubscriptionPlanPrice = subscriptionPlan.Price,
+                            SubscriptionPlanDescription = subscriptionPlan.Description,
+                            SubscriptionPlanName = subscriptionPlan.Name,
+                        });
 
             return new SubscriberByIdResponse
             {

@@ -50,7 +50,6 @@ namespace NetflixServer.Resources.Repositories
         {
             try
             {
-                //await _netflixDbService.UpdateAsync(subscriberEntity);
                 await _netflixDbService.ExecuteAsync(new Sql($"UPDATE SUBSCRIBER SET ID_SUBSCRIPTION_PLAN = '{subscriberEntity.SubscriptionPlanId}' WHERE ID_SUBSCRIBER = '{subscriberEntity.SubscriberId}'"));
             }
             catch (Exception ex)

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using NetflixServer.Shared;
 using NServiceBus;
 using NServiceBus.Persistence.Sql;
 
@@ -11,12 +12,14 @@ namespace NetflixServer.NServiceBus
 {
     public class Program
     {
+        private static IEndpointInstance _endpointInstance;
+
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+            CreateHostBuilder(args, "receiver").Build().Run();
         }
 
-        public static IHostBuilder CreateHostBuilder(string[] args)
+        public static IHostBuilder CreateHostBuilder(string[] args, string schemaName)
         {
             var builder = Host.CreateDefaultBuilder(args);
 
@@ -27,17 +30,28 @@ namespace NetflixServer.NServiceBus
                 endpointConfiguration.SendFailedMessagesTo("error");
                 endpointConfiguration.AuditProcessedMessagesTo("audit");
                 endpointConfiguration.EnableInstallers();
-                
+
+                var conventions = endpointConfiguration.Conventions();
+                //conventions.DefiningEventsAs(type => type.Namespace == typeof(EmailEvent).Namespace);
+                conventions.DefiningCommandsAs(type => type.Namespace == typeof(NotificationCommand).Namespace);
+                endpointConfiguration.RegisterComponents(registration: configureComponent =>
+                {
+                    configureComponent.ConfigureComponent<IMessageSession>(_ => _endpointInstance, DependencyLifecycle.SingleInstance);
+                });
+
                 var transport = endpointConfiguration.UseTransport<SqlServerTransport>();
                 transport.ConnectionString(connection);
-                transport.DefaultSchema("receiver");
+                transport.DefaultSchema(schemaName);
                 transport.UseSchemaForQueue("error", "dbo");
                 transport.UseSchemaForQueue("audit", "dbo");
+                transport.UseSchemaForQueue("Api", "sender");
                 transport.Transactions(TransportTransactionMode.SendsAtomicWithReceive);
+
+                transport.Routing().RouteToEndpoint(typeof(NotificationCommand), "Api");
 
                 var persistence = endpointConfiguration.UsePersistence<SqlPersistence>();
                 var dialect = persistence.SqlDialect<SqlDialect.MsSqlServer>();
-                dialect.Schema("receiver");
+                dialect.Schema(schemaName);
                 persistence.ConnectionBuilder(() => new SqlConnection(connection));
 
                 //endpointConfiguration.DefineCriticalErrorAction(OnCriticalError);

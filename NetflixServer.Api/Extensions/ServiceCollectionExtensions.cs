@@ -37,6 +37,7 @@ namespace NetflixServer.Api.Extensions
         public static IServiceCollection AddBusinessServices(this IServiceCollection services, IConfiguration configuration) =>
             services
                 .AddScoped<ISubscriberService, SubscriberService>()
-                .AddScoped<ISubscriptionPlanService, SubscriptionPlanService>();
+                .AddScoped<ISubscriptionPlanService, SubscriptionPlanService>()
+                .AddTransient<MessageService>();
     }
 }
