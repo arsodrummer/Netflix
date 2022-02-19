@@ -65,7 +65,7 @@ namespace NetflixServer.Business.Services
                     .SendAsync("NServiceBus",
                         new NotificationCommand
                         {
-                            Id = 999,
+                            Id = subscriberEntity.SubscriberId,
                             Email = subscriberEntity.Email,
                             UserName = subscriberEntity.UserName,
                             Active = subscriberEntity.Active,
