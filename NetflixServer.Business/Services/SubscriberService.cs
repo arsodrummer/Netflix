@@ -25,13 +25,13 @@ namespace NetflixServer.Business.Services
 
         public async Task CreateSubscriberAsync(Subscriber subscriber, CancellationToken cancellationToken)
         {
-            await _subscriberRepository.InsertSubscriberAsync(subscriber.Email, subscriber.UserName, subscriber.Active);
+            var subscriberId = await _subscriberRepository.InsertSubscriberAsync(subscriber.Email, subscriber.UserName, subscriber.Active);
 
             await _messageService
                     .SendAsync("NServiceBus", 
                         new NotificationCommand
                         {
-                            Id = 999,
+                            Id = subscriberId,
                             Email = subscriber.Email,
                             UserName = subscriber.UserName,
                             NotificationType = NotificationType.SubscriberCreated,
@@ -79,7 +79,7 @@ namespace NetflixServer.Business.Services
                     .SendAsync("NServiceBus",
                         new NotificationCommand
                         {
-                            Id = 999,
+                            Id = subscriber.SubscriberId,
                             Email = subscriber.Email,
                             UserName = subscriber.UserName,
                             Active = subscriber.Active,
