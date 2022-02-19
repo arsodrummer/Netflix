@@ -26,7 +26,7 @@ namespace NetflixServer.Business.Services
 
         public async Task CreateSubscriberAsync(Subscriber subscriber, CancellationToken cancellationToken)
         {
-            await _subscriberRepository.InsertSubscriberAsync(subscriber.Email, subscriber.UserName);
+            await _subscriberRepository.InsertSubscriberAsync(subscriber.Email, subscriber.UserName, subscriber.Active);
 
             await _messageService
                     .SendAsync("NServiceBus", 

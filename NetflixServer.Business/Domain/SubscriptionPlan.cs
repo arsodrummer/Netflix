@@ -1,4 +1,6 @@
-﻿namespace NetflixServer.Business.Domain
+﻿using System;
+
+namespace NetflixServer.Business.Domain
 {
     public class SubscriptionPlan
     {
@@ -9,5 +11,7 @@
         public string Name { get; set; }
 
         public string Description { get; set; }
+
+        public DateTime? ExpirationDate { get; set; }
     }
 }

@@ -10,6 +10,7 @@ namespace NetflixServer.Api.Mapper
             {
                 UserName = newSubscriberRequest.UserName,
                 Email = newSubscriberRequest.Email,
+                Active = true,
             };
     }
 }

@@ -11,6 +11,7 @@ namespace NetflixServer.Api.Mapper
                 Description = newSubscriptionPlanRequest.Description,
                 Price = newSubscriptionPlanRequest.Price,
                 Name = newSubscriptionPlanRequest.Name,
+                ExpirationDate = newSubscriptionPlanRequest.ExpirationDate,
             };
     }
 }

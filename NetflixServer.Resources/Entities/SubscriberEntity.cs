@@ -16,5 +16,8 @@ namespace NetflixServer.Resources.Entities
 
         [Column(Name = "USER_NAME")]
         public string UserName { get; set; }
+
+        [Column(Name = "ACTIVE")]
+        public bool Active { get; set; }
     }
 }

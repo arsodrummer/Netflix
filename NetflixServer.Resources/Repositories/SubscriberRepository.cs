@@ -15,7 +15,7 @@ namespace NetflixServer.Resources.Repositories
             _netflixDbService = netflixDbService;
         }
 
-        public async Task InsertSubscriberAsync(string email, string userName)
+        public async Task InsertSubscriberAsync(string email, string userName, bool active)
         {
             try
             {
@@ -26,6 +26,7 @@ namespace NetflixServer.Resources.Repositories
                     SubscriberId = sequenceValue,
                     Email = email,
                     UserName = userName,
+                    Active = active,
                 });
             }
             catch (Exception ex)

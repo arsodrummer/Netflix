@@ -2,6 +2,7 @@
 	<PropertyGroup>
 		<TargetFramework>netcoreapp3.1</TargetFramework>
 		<OutputType>Library</OutputType>
+		<NoDefaultLaunchSettingsFile>true</NoDefaultLaunchSettingsFile>
 	</PropertyGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\NetflixServer.Resources\NetflixServer.Resources.csproj" />

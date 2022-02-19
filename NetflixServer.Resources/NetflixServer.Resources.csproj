@@ -3,6 +3,7 @@
 		<TargetFramework>netstandard2.1</TargetFramework>
 		<IsPackable>false</IsPackable>
 		<OutputType>Library</OutputType>
+		<NoDefaultLaunchSettingsFile>true</NoDefaultLaunchSettingsFile>
 	</PropertyGroup>
 	
 	<ItemGroup>

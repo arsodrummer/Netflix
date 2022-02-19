@@ -15,7 +15,7 @@ namespace NetflixServer.Resources.Repositories
             _netflixDbService = netflixDbService;
         }
 
-        public async Task InsertSubscriptionPlanAsync(string name, decimal price, string description)
+        public async Task InsertSubscriptionPlanAsync(string name, decimal price, string description, DateTime? expirationDate)
         {
             try
             {
@@ -27,6 +27,7 @@ namespace NetflixServer.Resources.Repositories
                     Description = description,
                     Name = name,
                     Price = price,
+                    ExpirationDate = expirationDate,
                 });
             }
             catch (Exception ex)

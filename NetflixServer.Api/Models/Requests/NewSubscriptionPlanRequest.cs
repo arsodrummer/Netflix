@@ -1,4 +1,6 @@
-﻿namespace NetflixServer.Models.Requests
+﻿using System;
+
+namespace NetflixServer.Models.Requests
 {
     public class NewSubscriptionPlanRequest
     {
@@ -7,5 +9,7 @@
         public string Name { get; set; }
 
         public string Description { get; set; }
+
+        public DateTime? ExpirationDate { get; set; }
     }
 }

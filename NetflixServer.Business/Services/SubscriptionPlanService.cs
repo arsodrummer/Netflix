@@ -17,7 +17,7 @@ namespace NetflixServer.Business.Services
 
         public async Task CreateSubscriptionPlanAsync(SubscriptionPlan subscriptionPlan, CancellationToken cancellationToken)
         {
-            await _subscriptionPlanRepository.InsertSubscriptionPlanAsync(subscriptionPlan.Name, subscriptionPlan.Price, subscriptionPlan.Description);
+            await _subscriptionPlanRepository.InsertSubscriptionPlanAsync(subscriptionPlan.Name, subscriptionPlan.Price, subscriptionPlan.Description, subscriptionPlan.ExpirationDate);
         }
 
         public async Task<SubscriptionPlan> GetSubscriptionPlanByIdAsync(long subscriptionPlanId, CancellationToken cancellationToken)
@@ -35,6 +35,7 @@ namespace NetflixServer.Business.Services
                 Description = subscriptionPlanEntity.Description,
                 Name = subscriptionPlanEntity.Name,
                 Price = subscriptionPlanEntity.Price,
+                ExpirationDate = subscriptionPlanEntity.ExpirationDate,
             };
         }
     }
