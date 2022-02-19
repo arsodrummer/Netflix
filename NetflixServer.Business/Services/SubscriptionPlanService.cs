@@ -1,6 +1,9 @@
 ﻿using NetflixServer.Business.Domain;
 using NetflixServer.Business.Interfaces;
 using NetflixServer.Resources.Repositories;
+using NetflixServer.Resources.Services;
+using NetflixServer.Shared;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -8,11 +11,15 @@ namespace NetflixServer.Business.Services
 {
     public class SubscriptionPlanService : ISubscriptionPlanService
     {
+        public SubscriberRepository _subscriberRepository;
         public SubscriptionPlanRepository _subscriptionPlanRepository;
+        public MessageService _messageService;
 
-        public SubscriptionPlanService(SubscriptionPlanRepository subscriptionPlanRepository)
+        public SubscriptionPlanService(SubscriptionPlanRepository subscriptionPlanRepository, SubscriberRepository subscriberRepository, MessageService messageService)
         {
+            _subscriberRepository = subscriberRepository;
             _subscriptionPlanRepository = subscriptionPlanRepository;
+            _messageService = messageService;
         }
 
         public async Task CreateSubscriptionPlanAsync(SubscriptionPlan subscriptionPlan, CancellationToken cancellationToken)
@@ -36,6 +43,45 @@ namespace NetflixServer.Business.Services
                 Name = subscriptionPlanEntity.Name,
                 Price = subscriptionPlanEntity.Price,
                 ExpirationDate = subscriptionPlanEntity.ExpirationDate,
+            };
+        }
+
+        public async Task<SubscriptionPlan> UpdateSubscriptionPlanById(long subscriptionPlanId, decimal price, DateTime? expirationDate, CancellationToken cancellationToken)
+        {
+            var subscriptionPlanEntity = await _subscriptionPlanRepository.GetSubscriptionPlanByIdAsync(subscriptionPlanId);            
+            var subscriberEntity = await _subscriberRepository.GetSubscriberByIdAsync(subscriptionPlanId);
+
+            if (subscriptionPlanEntity == null || subscriberEntity == null)
+            {
+                return null;
+            }
+
+            subscriptionPlanEntity.Price = price;
+            subscriptionPlanEntity.ExpirationDate = expirationDate;
+
+            await _subscriptionPlanRepository.UpdateSubscriptionPlanByIdAsync(subscriptionPlanEntity);
+
+            await _messageService
+                    .SendAsync("NServiceBus",
+                        new NotificationCommand
+                        {
+                            Id = 999,
+                            Email = subscriberEntity.Email,
+                            UserName = subscriberEntity.UserName,
+                            Active = subscriberEntity.Active,
+                            SubscriptionPlanPrice = subscriptionPlanEntity.Price,
+                            SubscriptionPlanDescription = subscriptionPlanEntity.Description,
+                            SubscriptionPlanName = subscriptionPlanEntity.Name,
+                            NotificationType = NotificationType.SubscriptionPlanUpdated,
+                        });
+
+            return new SubscriptionPlan
+            {
+                Price = price,
+                ExpirationDate = expirationDate,
+                Description = subscriptionPlanEntity.Description,
+                Name = subscriptionPlanEntity.Name,
+                SubscriptionPlanId = subscriptionPlanEntity.SubscriptionPlanId,
             };
         }
     }

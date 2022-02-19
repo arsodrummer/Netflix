@@ -35,7 +35,7 @@ namespace NetflixServer.NServiceBus.Sagas
             // ...
             // construct email and send it
             // ...
-
+            
             MarkAsComplete();
             return Task.CompletedTask;
         }

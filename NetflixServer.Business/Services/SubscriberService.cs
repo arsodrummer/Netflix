@@ -4,7 +4,6 @@ using NetflixServer.Business.Models.Responses;
 using NetflixServer.Resources.Repositories;
 using NetflixServer.Resources.Services;
 using NetflixServer.Shared;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -34,8 +33,8 @@ namespace NetflixServer.Business.Services
                         {
                             Id = 999,
                             Email = subscriber.Email,
-                            Content = "The new subscriber has been created!",
                             UserName = subscriber.UserName,
+                            NotificationType = NotificationType.SubscriberCreated,
                         });
         }
 
@@ -59,6 +58,8 @@ namespace NetflixServer.Business.Services
                 Description = subscriptionPlan.Description,
                 Name = subscriptionPlan.Name,
                 Price = subscriptionPlan.Price,
+                Active = res.Active,
+                ExpirationDate = subscriptionPlan.ExpirationDate,
             };
         }
 
@@ -80,11 +81,12 @@ namespace NetflixServer.Business.Services
                         {
                             Id = 999,
                             Email = subscriber.Email,
-                            Content = "The new subscription plan has been activated!",
                             UserName = subscriber.UserName,
+                            Active = subscriber.Active,
                             SubscriptionPlanPrice = subscriptionPlan.Price,
                             SubscriptionPlanDescription = subscriptionPlan.Description,
                             SubscriptionPlanName = subscriptionPlan.Name,
+                            NotificationType = NotificationType.SubscriberActivated,
                         });
 
             return new SubscriberByIdResponse

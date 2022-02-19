@@ -10,12 +10,18 @@ namespace NetflixServer.Shared
 
         public string UserName { get; set; }
 
-        public string Content { get; set; }
+        //public string Content { get; set; }
+
+        public bool Active { get; set; }
 
         public decimal SubscriptionPlanPrice { get; set; }
 
         public string SubscriptionPlanName { get; set; }
 
         public string SubscriptionPlanDescription { get; set; }
+
+        public DateTime? SubscriptionPlanExpirationDate { get; set; }
+
+        public NotificationType NotificationType { get; set; }
     }
 }
