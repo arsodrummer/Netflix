@@ -1,6 +1,8 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using NetflixServer.NServiceBus.Services;
+using NetflixServer.Resources.Services;
 using NetflixServer.Shared;
 using NServiceBus;
 using NServiceBus.Persistence.Sql;
@@ -32,7 +34,7 @@ namespace NetflixServer.NServiceBus
                 endpointConfiguration.EnableInstallers();
 
                 var conventions = endpointConfiguration.Conventions();
-                //conventions.DefiningEventsAs(type => type.Namespace == typeof(EmailEvent).Namespace);
+                //conventions.DefiningEventsAs(type => type.Name == typeof(SendEmailCommand).Name);
                 conventions.DefiningCommandsAs(type => type.Namespace == typeof(NotificationCommand).Namespace);
                 endpointConfiguration.RegisterComponents(registration: configureComponent =>
                 {
@@ -60,7 +62,12 @@ namespace NetflixServer.NServiceBus
                 return endpointConfiguration;
             });
 
-            return builder.ConfigureServices(services => { services.AddLogging(); });
+            return builder.ConfigureServices(services =>
+            {
+                services.AddLogging();
+                services.AddSingleton<NotificationContentService>();
+                services.AddSingleton<EmailService>();
+            });
         }
     }
 
