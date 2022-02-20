@@ -4,6 +4,7 @@ using NetflixServer.Business.Models.Responses;
 using NetflixServer.Resources.Repositories;
 using NetflixServer.Resources.Services;
 using NetflixServer.Shared;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -63,7 +64,7 @@ namespace NetflixServer.Business.Services
             };
         }
 
-        public async Task<SubscriberByIdResponse> UpdateSubscriberByIdAsync(long subscriberId, long subscriptionPlanId, CancellationToken cancellationToken)
+        public async Task<SubscriberByIdResponse> UpdateSubscriberByIdAsync(long subscriberId, long subscriptionPlanId, DateTime? expirationDate, CancellationToken cancellationToken)
         {
             var subscriber = await _subscriberRepository.GetSubscriberByIdAsync(subscriberId);
             var subscriptionPlan = await _subscriptionPlanRepository.GetSubscriptionPlanByIdAsync(subscriptionPlanId);
@@ -87,6 +88,7 @@ namespace NetflixServer.Business.Services
                             SubscriptionPlanDescription = subscriptionPlan.Description,
                             SubscriptionPlanName = subscriptionPlan.Name,
                             NotificationType = NotificationType.SubscriberActivated,
+                            SubscriptionPlanExpirationDate = expirationDate,
                         });
 
             return new SubscriberByIdResponse

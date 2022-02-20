@@ -12,7 +12,7 @@ namespace NetflixServer.NServiceBus.Services
                 case NotificationType.SubscriberCreated:
                     return ("Wellcome to Netflix", $"Hello {userName}! You've recently created a Netflix account. See the link below to choose your subscription plan.");
                 case NotificationType.SubscriberActivated:
-                    return ("Subscription plan activation", $"Dear {userName}! You've recently chosen '{subscriptionPlanName}' subscription plan. Active until {expDate}");
+                    return ("Subscription plan activation", $"Dear {userName}! You've recently chosen '{subscriptionPlanName}' subscription plan. Activated until {expDate}");
                 case NotificationType.SubscriberDeactivated:
                     return (string.Empty, string.Empty);
                 case NotificationType.SubscriptionPlanUpdated:

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NetflixServer.Api.Mapper;
+using NetflixServer.Api.Models.Queries;
 using NetflixServer.Business.Interfaces;
 using NetflixServer.Business.Models.Responses;
 using NetflixServer.Models.Queries;
@@ -44,10 +45,11 @@ namespace NetflixServer.Controllers
         }
 
         [HttpPatch]
+        [Route("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> PatchByIdAsync([FromBody] UpdateSubscriberRequest updateSubscriberRequest, CancellationToken cancellationToken)
+        public async Task<IActionResult> PatchByIdAsync([FromBody] UpdateSubscriberRequest updateSubscriberRequest, [FromRoute] UpdateSubscriberByIdQuery updateSubscriptionPlanByIdQuery, CancellationToken cancellationToken)
         {
-            var response = await _subscriptionService.UpdateSubscriberByIdAsync(updateSubscriberRequest.SubscriberId, updateSubscriberRequest.SubscriptionPlanId, cancellationToken);
+            var response = await _subscriptionService.UpdateSubscriberByIdAsync(updateSubscriptionPlanByIdQuery.Id, updateSubscriberRequest.SubscriptionPlanId, updateSubscriberRequest.ExpirationDate, cancellationToken);
 
             if (response == null)
                 return BadRequest();

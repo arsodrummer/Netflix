@@ -12,6 +12,6 @@ namespace NetflixServer.Business.Interfaces
 
         Task<SubscriberByIdResponse> GetSubscriberByIdAsync(long subscriberId, CancellationToken cancellationToken);
 
-        Task<SubscriberByIdResponse> UpdateSubscriberByIdAsync(long subscriberId, long subscriptionPlanId, CancellationToken cancellationToken);
+        Task<SubscriberByIdResponse> UpdateSubscriberByIdAsync(long subscriberId, long subscriptionPlanId, DateTime? expirationDate, CancellationToken cancellationToken);
     }
 }
