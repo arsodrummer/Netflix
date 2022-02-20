@@ -14,9 +14,11 @@ namespace NetflixServer.NServiceBus.Services
                 case NotificationType.SubscriberActivated:
                     return ("Subscription plan activation", $"Dear {userName}! You've recently chosen '{subscriptionPlanName}' subscription plan. Activated until {expDate}");
                 case NotificationType.SubscriberDeactivated:
-                    return (string.Empty, string.Empty);
+                    return ("Subscriber deactivated", $"Hi {userName}! Your acoount has been recently deactivated.");
                 case NotificationType.SubscriptionPlanUpdated:
                     return ("Subscription plan update", $"Dear {userName}! Your subscription plan has been updated. Price: {price}, Expiration date: {expDate}");
+                case NotificationType.SubscriptionPlanExpired:
+                    return ("Subscription plan expirated", $"Dear {userName}! Your subscription plan will be expired on {expDate}. Choose another one or prolonged this one.");
                 default:
                     return (string.Empty, string.Empty);
             }

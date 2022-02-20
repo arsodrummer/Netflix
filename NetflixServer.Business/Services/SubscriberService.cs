@@ -41,30 +41,30 @@ namespace NetflixServer.Business.Services
 
         public async Task<SubscriberByIdResponse> GetSubscriberByIdAsync(long subscriberId, CancellationToken cancellationToken)
         {
-            var res = await _subscriberRepository.GetSubscriberByIdAsync(subscriberId);
+            var subscriberEntity = await _subscriberRepository.GetSubscriberByIdAsync(subscriberId);
             
-            if (res == null)
+            if (subscriberEntity == null)
             {
                 return null;
             }
 
-            var subscriptionPlan = await _subscriptionPlanRepository.GetSubscriptionPlanByIdAsync(res.SubscriptionPlanId.Value);
+            var subscriptionPlan = await _subscriptionPlanRepository.GetSubscriptionPlanByIdAsync(subscriberEntity.SubscriptionPlanId.Value);
 
             return new SubscriberByIdResponse
             {
-                SubscriberId = res.SubscriberId,
-                SubscriptionPlanId = res.SubscriptionPlanId,
-                Email = res.Email,
-                UserName = res.UserName,
+                SubscriberId = subscriberEntity.SubscriberId,
+                SubscriptionPlanId = subscriberEntity.SubscriptionPlanId,
+                Email = subscriberEntity.Email,
+                UserName = subscriberEntity.UserName,
                 Description = subscriptionPlan.Description,
                 Name = subscriptionPlan.Name,
                 Price = subscriptionPlan.Price,
-                Active = res.Active,
+                Active = subscriberEntity.Active,
                 ExpirationDate = subscriptionPlan.ExpirationDate,
             };
         }
 
-        public async Task<SubscriberByIdResponse> UpdateSubscriberByIdAsync(long subscriberId, long subscriptionPlanId, DateTime? expirationDate, CancellationToken cancellationToken)
+        public async Task<SubscriberByIdResponse> UpdateSubscriberByIdAsync(long subscriberId, long subscriptionPlanId, DateTime? expirationDate, bool isActiveSubsciber, CancellationToken cancellationToken)
         {
             var subscriber = await _subscriberRepository.GetSubscriberByIdAsync(subscriberId);
             var subscriptionPlan = await _subscriptionPlanRepository.GetSubscriptionPlanByIdAsync(subscriptionPlanId);
@@ -72,24 +72,45 @@ namespace NetflixServer.Business.Services
             if (subscriptionPlan == null)
                 return null;
 
-            subscriber.SubscriptionPlanId = subscriptionPlanId;
+            subscriber.SubscriptionPlanId = subscriptionPlanId;            
+            subscriber.Active = isActiveSubsciber;
 
             await _subscriberRepository.UpdateSubscriberByIdAsync(subscriber);
 
-            await _messageService
-                    .SendAsync("NServiceBus",
-                        new NotificationCommand
-                        {
-                            Id = subscriber.SubscriberId,
-                            Email = subscriber.Email,
-                            UserName = subscriber.UserName,
-                            Active = subscriber.Active,
-                            SubscriptionPlanPrice = subscriptionPlan.Price,
-                            SubscriptionPlanDescription = subscriptionPlan.Description,
-                            SubscriptionPlanName = subscriptionPlan.Name,
-                            NotificationType = NotificationType.SubscriberActivated,
-                            SubscriptionPlanExpirationDate = expirationDate,
-                        });
+            if (!isActiveSubsciber)
+            {
+                await _messageService
+                                    .SendAsync("NServiceBus",
+                                        new NotificationCommand
+                                        {
+                                            Id = subscriber.SubscriberId,
+                                            Email = subscriber.Email,
+                                            UserName = subscriber.UserName,
+                                            Active = subscriber.Active,
+                                            SubscriptionPlanPrice = subscriptionPlan.Price,
+                                            SubscriptionPlanDescription = subscriptionPlan.Description,
+                                            SubscriptionPlanName = subscriptionPlan.Name,
+                                            NotificationType = NotificationType.SubscriberDeactivated,
+                                            SubscriptionPlanExpirationDate = null,
+                                        });
+            }
+            else
+            {
+                await _messageService
+                                .SendAsync("NServiceBus",
+                                    new NotificationCommand
+                                    {
+                                        Id = subscriber.SubscriberId,
+                                        Email = subscriber.Email,
+                                        UserName = subscriber.UserName,
+                                        Active = subscriber.Active,
+                                        SubscriptionPlanPrice = subscriptionPlan.Price,
+                                        SubscriptionPlanDescription = subscriptionPlan.Description,
+                                        SubscriptionPlanName = subscriptionPlan.Name,
+                                        NotificationType = NotificationType.SubscriberActivated,
+                                        SubscriptionPlanExpirationDate = expirationDate,
+                                    });
+            }
 
             return new SubscriberByIdResponse
             {

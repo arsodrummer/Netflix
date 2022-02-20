@@ -37,7 +37,7 @@ namespace NetflixServer.NServiceBus.Sagas
                 Subject = subject,
             };
 
-            if (DateTime.UtcNow.Subtract(message.SubscriptionPlanExpirationDate.Value).Days > 30)
+            if (message.NotificationType == NotificationType.SubscriberActivated)
             {
                 await RequestTimeout(context, TimeSpan.FromSeconds(2), message);
             }
@@ -55,7 +55,7 @@ namespace NetflixServer.NServiceBus.Sagas
 
         public async Task Timeout(NotificationCommand state, IMessageHandlerContext context)
         {
-            (string subject, string body) = _notificationContentService.CreateEmailContent(state.NotificationType, state.UserName, state.SubscriptionPlanName, state.SubscriptionPlanExpirationDate, state.SubscriptionPlanPrice);
+            (string subject, string body) = _notificationContentService.CreateEmailContent(NotificationType.SubscriptionPlanExpired, state.UserName, state.SubscriptionPlanName, state.SubscriptionPlanExpirationDate, state.SubscriptionPlanPrice);
 
             var sendEmailCommand = new SendEmailCommand
             {
@@ -65,8 +65,6 @@ namespace NetflixServer.NServiceBus.Sagas
             };
 
             await context.SendLocal(sendEmailCommand);
-            //MarkAsComplete();
-            //return Task.CompletedTask;
         }
     }
 }
