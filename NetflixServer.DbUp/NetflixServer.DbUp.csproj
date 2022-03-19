@@ -1,14 +1,9 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Remove="Scripts\001.CREATE_SUBSCRIBER.sql" />
-    <None Remove="Scripts\002.CREATE_SUBSCRIPTION_PLAN.sql" />
-  </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Scripts\002.CREATE_SUBSCRIPTION_PLAN.sql" />

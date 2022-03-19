@@ -20,11 +20,12 @@ public static class SqlHelper
 
     public static void CreateSchema(string connectionString, string schema)
     {
-        var sql = $@"
-if not exists (select  *
-               from    sys.schemas
-               where   name = N'{schema}')
-    exec('create schema {schema}');";
+        var sql = $@" IF NOT EXISTS
+                (SELECT *
+                    FROM sys.schemas
+                    WHERE name = N'{schema}')
+                    EXEC('CREATE SCHEMA {schema}'
+                );";
         ExecuteSql(connectionString, sql);
     }
 
@@ -41,10 +42,7 @@ if not exists (select  *
 
             using (var command = connection.CreateCommand())
             {
-                command.CommandText = $@"
-if(db_id('{database}') is null)
-    create database [{database}]
-";
+                command.CommandText = $@"IF(db_id('{database}') IS NULL) CREATE DATABASE [{database}]";
                 command.ExecuteNonQuery();
             }
         }
