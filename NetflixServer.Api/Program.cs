@@ -21,7 +21,7 @@ namespace NetflixServer
                 {
                     IConfiguration configuration = ctx.Configuration;
                     var connection = configuration.GetConnectionString("DefaultConnection");
-                    var endpointConfiguration = new EndpointConfiguration("Api");
+                    var endpointConfiguration = new EndpointConfiguration(General.EndpointNameSender);
                     endpointConfiguration.SendFailedMessagesTo("error");
                     endpointConfiguration.EnableInstallers();
 

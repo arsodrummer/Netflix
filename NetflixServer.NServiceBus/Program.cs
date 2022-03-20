@@ -30,7 +30,7 @@ namespace NetflixServer.NServiceBus
             {
                 IConfiguration configuration = ctx.Configuration;
                 var connection = configuration.GetConnectionString("DefaultConnection");
-                var endpointConfiguration = new EndpointConfiguration("NServiceBus");
+                var endpointConfiguration = new EndpointConfiguration(General.EndpointNameReceiver);
                 endpointConfiguration.SendFailedMessagesTo("error");
                 endpointConfiguration.AuditProcessedMessagesTo("audit");
                 endpointConfiguration.EnableInstallers();
@@ -48,10 +48,10 @@ namespace NetflixServer.NServiceBus
                 transport.DefaultSchema(schemaName);
                 transport.UseSchemaForQueue("error", "dbo");
                 transport.UseSchemaForQueue("audit", "dbo");
-                transport.UseSchemaForQueue("Api", "sender");
+                transport.UseSchemaForQueue(General.EndpointNameSender, "sender");
                 transport.Transactions(TransportTransactionMode.SendsAtomicWithReceive);
 
-                transport.Routing().RouteToEndpoint(typeof(NotificationCommand), "Api");
+                transport.Routing().RouteToEndpoint(typeof(NotificationCommand), General.EndpointNameSender);
 
                 var persistence = endpointConfiguration.UsePersistence<SqlPersistence>();
                 var dialect = persistence.SqlDialect<SqlDialect.MsSqlServer>();
