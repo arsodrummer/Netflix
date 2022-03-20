@@ -48,20 +48,23 @@ namespace NetflixServer.Business.Services
 
         public async Task<SubscriptionPlan> UpdateSubscriptionPlanById(long subscriptionPlanId, decimal price, DateTime? expirationDate, CancellationToken cancellationToken)
         {
-            var subscriptionPlanEntity = await _subscriptionPlanRepository.GetSubscriptionPlanByIdAsync(subscriptionPlanId);            
+            var subscriptionPlanEntity = await _subscriptionPlanRepository.GetSubscriptionPlanByIdAsync(subscriptionPlanId);
             var subscriberEntity = await _subscriberRepository.GetSubscriberByIdAsync(subscriptionPlanId);
 
-            if (subscriptionPlanEntity == null || subscriberEntity == null)
+            if (subscriptionPlanEntity == null)
             {
                 return null;
             }
+            else if(subscriptionPlanEntity != null && subscriberEntity == null)
+            {
+                subscriptionPlanEntity.Price = price;
+                subscriptionPlanEntity.ExpirationDate = expirationDate;
 
-            subscriptionPlanEntity.Price = price;
-            subscriptionPlanEntity.ExpirationDate = expirationDate;
-
-            await _subscriptionPlanRepository.UpdateSubscriptionPlanByIdAsync(subscriptionPlanEntity);
-
-            await _messageService
+                await _subscriptionPlanRepository.UpdateSubscriptionPlanByIdAsync(subscriptionPlanEntity);
+            }
+            else
+            {
+                await _messageService
                     .SendAsync("NServiceBus",
                         new NotificationCommand
                         {
@@ -74,6 +77,7 @@ namespace NetflixServer.Business.Services
                             SubscriptionPlanName = subscriptionPlanEntity.Name,
                             NotificationType = NotificationType.SubscriptionPlanUpdated,
                         });
+            }
 
             return new SubscriptionPlan
             {
