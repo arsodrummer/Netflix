@@ -1,4 +1,5 @@
 ﻿using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NetflixServer.NServiceBus.Services;
@@ -27,7 +28,8 @@ namespace NetflixServer.NServiceBus
 
             builder.UseNServiceBus(ctx =>
             {
-                var connection = "Server=localhost,1433;Initial Catalog=master;User ID=sa;Password=_Netflix_123456;MultipleActiveResultSets=True;Connection Timeout=30;";
+                IConfiguration configuration = ctx.Configuration;
+                var connection = configuration.GetConnectionString("DefaultConnection");
                 var endpointConfiguration = new EndpointConfiguration("NServiceBus");
                 endpointConfiguration.SendFailedMessagesTo("error");
                 endpointConfiguration.AuditProcessedMessagesTo("audit");

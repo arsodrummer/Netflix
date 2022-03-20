@@ -1,9 +1,9 @@
-﻿using System.Data.SqlClient;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using NetflixServer.Shared;
 using NServiceBus;
+using System.Threading.Tasks;
 
 namespace NetflixServer
 {
@@ -19,7 +19,8 @@ namespace NetflixServer
                 })
                 .UseNServiceBus(ctx =>
                 {
-                    var connection = "Server=localhost,1433;Initial Catalog=master;User ID=sa;Password=_Netflix_123456;MultipleActiveResultSets=True;Connection Timeout=30;";
+                    IConfiguration configuration = ctx.Configuration;
+                    var connection = configuration.GetConnectionString("DefaultConnection");
                     var endpointConfiguration = new EndpointConfiguration("Api");
                     endpointConfiguration.SendFailedMessagesTo("error");
                     endpointConfiguration.EnableInstallers();
