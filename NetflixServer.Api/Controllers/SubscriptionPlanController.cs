@@ -45,6 +45,19 @@ namespace NetflixServer.Controllers
             return Ok(response);
         }
 
+        [HttpGet]
+        [Route("List")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetListAsync(CancellationToken cancellationToken)
+        {
+            var response = await _subscriptionPlanService.GetSubscriptionPlanListAsync(cancellationToken);
+
+            if (response == null)
+                return NotFound();
+
+            return Ok(response);
+        }
+
         [HttpPatch]
         [Route("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -53,6 +66,7 @@ namespace NetflixServer.Controllers
             var response = await _subscriptionPlanService.UpdateSubscriptionPlanById(updateSubscriptionPlanByIdQuery.Id,
                 updateSubscriptionPlanByIdRequest.Price,
                 updateSubscriptionPlanByIdRequest.ExpirationDate,
+                updateSubscriptionPlanByIdRequest.Name,
                 cancellationToken);
 
             if (response == null)

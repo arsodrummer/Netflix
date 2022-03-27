@@ -2,6 +2,7 @@
 using NetflixServer.Resources.Services;
 using PetaPoco;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace NetflixServer.Resources.Repositories
@@ -48,17 +49,31 @@ namespace NetflixServer.Resources.Repositories
             }
         }
 
+        public async Task<IEnumerable<SubscriptionPlanEntity>> GetSubscriptionPlanListAsync()
+        {
+            try
+            {
+                return await _netflixDbService.GetByQueryAsync<SubscriptionPlanEntity>(new Sql($"SELECT * FROM SUBSCRIPTION_PLAN"));
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public async Task UpdateSubscriptionPlanByIdAsync(SubscriptionPlanEntity subscriptionPlanEntity)
         {
             try
             {
                 await _netflixDbService.ExecuteAsync(new Sql(@$"UPDATE SUBSCRIPTION_PLAN 
-                                                                SET EXPIRATION_DATE = '{subscriptionPlanEntity.ExpirationDate}', PRICE = '{subscriptionPlanEntity.Price}'
+                                                                SET 
+                                                                    EXPIRATION_DATE = '{subscriptionPlanEntity.ExpirationDate}',
+                                                                    PRICE = '{subscriptionPlanEntity.Price}',
+                                                                    NAME = '{subscriptionPlanEntity.Name}'
                                                                 WHERE ID_SUBSCRIPTION_PLAN = '{subscriptionPlanEntity.SubscriptionPlanId}'"));
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
         }

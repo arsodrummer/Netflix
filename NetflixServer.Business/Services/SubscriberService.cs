@@ -5,6 +5,7 @@ using NetflixServer.Resources.Repositories;
 using NetflixServer.Resources.Services;
 using NetflixServer.Shared;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -29,7 +30,7 @@ namespace NetflixServer.Business.Services
             var subscriberId = await _subscriberRepository.InsertSubscriberAsync(subscriber.Email, subscriber.UserName, subscriber.Active);
 
             await _messageService
-                    .SendAsync("NServiceBus", 
+                    .SendAsync(General.EndpointNameReceiver,
                         new NotificationCommand
                         {
                             Id = subscriberId,
@@ -42,7 +43,7 @@ namespace NetflixServer.Business.Services
         public async Task<SubscriberByIdResponse> GetSubscriberByIdAsync(long subscriberId, CancellationToken cancellationToken)
         {
             var subscriberEntity = await _subscriberRepository.GetSubscriberByIdAsync(subscriberId);
-            
+
             if (subscriberEntity == null)
             {
                 return null;
@@ -64,15 +65,36 @@ namespace NetflixServer.Business.Services
             };
         }
 
+        public async Task<List<SubscriberByIdResponse>> GetSubscriberListAsync(CancellationToken cancellationToken)
+        {
+            var res = await _subscriberRepository.GetSubscriberListAsync();
+
+            List<SubscriberByIdResponse> listOfSubscriptionPlans = new List<SubscriberByIdResponse>();
+
+            foreach (var item in res)
+            {
+                listOfSubscriptionPlans.Add(new SubscriberByIdResponse
+                {
+                    SubscriberId = item.SubscriberId,
+                    SubscriptionPlanId = item.SubscriptionPlanId,
+                    Email = item.Email,
+                    UserName = item.UserName,
+                    Active = item.Active,
+                });
+            }
+
+            return listOfSubscriptionPlans;
+        }
+
         public async Task<SubscriberByIdResponse> UpdateSubscriberByIdAsync(long subscriberId, long subscriptionPlanId, DateTime? expirationDate, bool isActiveSubsciber, CancellationToken cancellationToken)
         {
             var subscriber = await _subscriberRepository.GetSubscriberByIdAsync(subscriberId);
             var subscriptionPlan = await _subscriptionPlanRepository.GetSubscriptionPlanByIdAsync(subscriptionPlanId);
-            
-            if (subscriptionPlan == null)
+
+            if (subscriptionPlan == null || subscriber == null)
                 return null;
 
-            subscriber.SubscriptionPlanId = subscriptionPlanId;            
+            subscriber.SubscriptionPlanId = subscriptionPlanId;
             subscriber.Active = isActiveSubsciber;
 
             await _subscriberRepository.UpdateSubscriberByIdAsync(subscriber);
@@ -80,7 +102,7 @@ namespace NetflixServer.Business.Services
             if (!isActiveSubsciber)
             {
                 await _messageService
-                                    .SendAsync("NServiceBus",
+                                    .SendAsync(General.EndpointNameReceiver,
                                         new NotificationCommand
                                         {
                                             Id = subscriber.SubscriberId,
@@ -97,7 +119,7 @@ namespace NetflixServer.Business.Services
             else
             {
                 await _messageService
-                                .SendAsync("NServiceBus",
+                                .SendAsync(General.EndpointNameReceiver,
                                     new NotificationCommand
                                     {
                                         Id = subscriber.SubscriberId,

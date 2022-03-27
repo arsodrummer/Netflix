@@ -2,6 +2,7 @@
 using NetflixServer.Resources.Services;
 using PetaPoco;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace NetflixServer.Resources.Repositories
@@ -42,6 +43,18 @@ namespace NetflixServer.Resources.Repositories
             try
             {
                 return await _netflixDbService.GetFirstOrDefaultAsync<SubscriberEntity>(new Sql($"SELECT * FROM SUBSCRIBER WHERE ID_SUBSCRIBER = '{subscriberId}'"));
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<IEnumerable<SubscriberEntity>> GetSubscriberListAsync()
+        {
+            try
+            {
+                return await _netflixDbService.GetByQueryAsync<SubscriberEntity>(new Sql($"SELECT * FROM SUBSCRIBER"));
             }
             catch (Exception ex)
             {

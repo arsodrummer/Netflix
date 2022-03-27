@@ -4,6 +4,7 @@ using NetflixServer.Resources.Repositories;
 using NetflixServer.Resources.Services;
 using NetflixServer.Shared;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -46,7 +47,28 @@ namespace NetflixServer.Business.Services
             };
         }
 
-        public async Task<SubscriptionPlan> UpdateSubscriptionPlanById(long subscriptionPlanId, decimal price, DateTime? expirationDate, CancellationToken cancellationToken)
+        public async Task<List<SubscriptionPlan>> GetSubscriptionPlanListAsync(CancellationToken cancellationToken)
+        {
+            var res = await _subscriptionPlanRepository.GetSubscriptionPlanListAsync();
+
+            List<SubscriptionPlan> listOfSubscriptionPlans = new List<SubscriptionPlan>();
+
+            foreach (var item in res)
+            {
+                listOfSubscriptionPlans.Add(new SubscriptionPlan
+                {
+                    SubscriptionPlanId = item.SubscriptionPlanId,
+                    Description = item.Description,
+                    Name = item.Name,
+                    Price = item.Price,
+                    ExpirationDate = item.ExpirationDate,
+                });
+            }
+
+            return listOfSubscriptionPlans;
+        }
+
+        public async Task<SubscriptionPlan> UpdateSubscriptionPlanById(long subscriptionPlanId, decimal price, DateTime? expirationDate, string name, CancellationToken cancellationToken)
         {
             var subscriptionPlanEntity = await _subscriptionPlanRepository.GetSubscriptionPlanByIdAsync(subscriptionPlanId);
             var subscriberEntity = await _subscriberRepository.GetSubscriberByIdAsync(subscriptionPlanId);
@@ -59,13 +81,14 @@ namespace NetflixServer.Business.Services
             {
                 subscriptionPlanEntity.Price = price;
                 subscriptionPlanEntity.ExpirationDate = expirationDate;
+                subscriptionPlanEntity.Name = name;
 
                 await _subscriptionPlanRepository.UpdateSubscriptionPlanByIdAsync(subscriptionPlanEntity);
             }
             else
             {
                 await _messageService
-                    .SendAsync("NServiceBus",
+                    .SendAsync(General.EndpointNameReceiver,
                         new NotificationCommand
                         {
                             Id = subscriberEntity.SubscriberId,
