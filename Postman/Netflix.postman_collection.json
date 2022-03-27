@@ -1,0 +1,179 @@
+{
+	"info": {
+		"_postman_id": "7e30cf2d-6e00-42f3-819a-7787ba819fc9",
+		"name": "Netflix",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Subscription plans",
+			"item": [
+				{
+					"name": "Subscription plan",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"price\" : 5,\r\n    \"name\" : \"Super plan\",\r\n    \"description\" : \"Use it for every account\",\r\n    \"expirationDate\" : \"2022-01-01\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/SubscriptionPlan",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"SubscriptionPlan"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List of Subscription plans",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/SubscriptionPlan/List",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"SubscriptionPlan",
+								"List"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Subscription plan by Id",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"price\" : 5,\r\n    \"name\" : \"Super plan\",\r\n    \"expirationDate\" : \"2022-01-01\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/SubscriptionPlan/1",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"SubscriptionPlan",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Subscribers",
+			"item": [
+				{
+					"name": "Subscriber",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\" : \"bob.bobby@gmail.com\",\r\n    \"username\" : \"Bob\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/Subscriber",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"Subscriber"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Subscriber by Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/Subscriber/1",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"Subscriber",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List of Subscribers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/Subscriber/Lits",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"Subscriber",
+								"Lits"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Subscriber by Id",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"subscriptionPlanId\" : 1,\r\n    \"expirationDate\" : \"2022-01-01\",\r\n    \"active\" : true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/Subscriber/1",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"Subscriber",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
