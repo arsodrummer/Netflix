@@ -49,6 +49,18 @@ namespace NetflixServer.Business.Services
                 return null;
             }
 
+            if (!subscriberEntity.SubscriptionPlanId.HasValue)
+            {
+                return new SubscriberByIdResponse
+                {
+                    SubscriberId = subscriberEntity.SubscriberId,
+                    SubscriptionPlanId = subscriberEntity.SubscriptionPlanId,
+                    Email = subscriberEntity.Email,
+                    UserName = subscriberEntity.UserName,
+                    Active = subscriberEntity.Active,
+                };
+            }
+
             var subscriptionPlan = await _subscriptionPlanRepository.GetSubscriptionPlanByIdAsync(subscriberEntity.SubscriptionPlanId.Value);
 
             return new SubscriberByIdResponse
