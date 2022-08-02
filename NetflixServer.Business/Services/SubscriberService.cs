@@ -12,83 +12,83 @@ using System.Threading.Tasks;
 
 namespace NetflixServer.Business.Services
 {
-    public class SubscriberService : ISubscriberService
+    public class UserService : IUserService
     {
-        public SubscriberRepository _subscriberRepository;
+        public UserRepository _userRepository;
         public SubscriptionPlanRepository _subscriptionPlanRepository;
         public MessageService _messageService;
 
-        public SubscriberService(SubscriberRepository subscriberRepository, SubscriptionPlanRepository subscriptionPlanRepository, MessageService messageService)
+        public UserService(UserRepository userRepository, SubscriptionPlanRepository subscriptionPlanRepository, MessageService messageService)
         {
-            _subscriberRepository = subscriberRepository;
+            _userRepository = userRepository;
             _subscriptionPlanRepository = subscriptionPlanRepository;
             _messageService = messageService;
         }
 
-        public async Task CreateSubscriberAsync(Subscriber subscriber, CancellationToken cancellationToken)
+        public async Task CreateUserAsync(User user, CancellationToken cancellationToken)
         {
-            var subscriberId = await _subscriberRepository.InsertSubscriberAsync(subscriber.Email, subscriber.UserName, subscriber.Active);
+            var userId = await _userRepository.InsertUserAsync(user.Email, user.UserName, user.Active);
 
-            await _messageService
-                    .SendAsync(General.EndpointNameReceiver,
-                        new NotificationCommand
-                        {
-                            Id = subscriberId,
-                            Email = subscriber.Email,
-                            UserName = subscriber.UserName,
-                            NotificationType = NotificationType.SubscriberCreated,
-                        });
+            //await _messageService
+            //        .SendAsync(General.EndpointNameReceiver,
+            //            new NotificationCommand
+            //            {
+            //                Id = userId,
+            //                Email = user.Email,
+            //                UserName = user.UserName,
+            //                NotificationType = NotificationType.UserCreated,
+            //            });
         }
 
-        public async Task<SubscriberByIdResponse> GetSubscriberByIdAsync(long subscriberId, CancellationToken cancellationToken)
+        public async Task<UserByIdResponse> GetUserByIdAsync(long userId, CancellationToken cancellationToken)
         {
-            var subscriberEntity = await _subscriberRepository.GetSubscriberByIdAsync(subscriberId);
+            var userEntity = await _userRepository.GetUserByIdAsync(userId);
 
-            if (subscriberEntity == null)
+            if (userEntity == null)
             {
                 return null;
             }
 
-            if (!subscriberEntity.SubscriptionPlanId.HasValue)
-            {
-                return new SubscriberByIdResponse
-                {
-                    SubscriberId = subscriberEntity.SubscriberId,
-                    SubscriptionPlanId = subscriberEntity.SubscriptionPlanId,
-                    Email = subscriberEntity.Email,
-                    UserName = subscriberEntity.UserName,
-                    Active = subscriberEntity.Active,
-                };
-            }
+            //if (!userEntity.SubscriptionPlanId.HasValue)
+            //{
+            //    return new UserByIdResponse
+            //    {
+            //        UserId = userEntity.UserId,
+            //        SubscriptionPlanId = userEntity.SubscriptionPlanId,
+            //        Email = userEntity.Email,
+            //        UserName = userEntity.UserName,
+            //        Active = userEntity.Active,
+            //    };
+            //}
 
-            var subscriptionPlan = await _subscriptionPlanRepository.GetSubscriptionPlanByIdAsync(subscriberEntity.SubscriptionPlanId.Value);
+            //var subscriptionPlan = await _subscriptionPlanRepository.GetSubscriptionPlanByIdAsync(userEntity.SubscriptionPlanId.Value);
 
-            return new SubscriberByIdResponse
+            return new UserByIdResponse
             {
-                SubscriberId = subscriberEntity.SubscriberId,
-                SubscriptionPlanId = subscriberEntity.SubscriptionPlanId,
-                Email = subscriberEntity.Email,
-                UserName = subscriberEntity.UserName,
-                Description = subscriptionPlan.Description,
-                Name = subscriptionPlan.Name,
-                Price = subscriptionPlan.Price,
-                Active = subscriberEntity.Active,
-                ExpirationDate = subscriptionPlan.ExpirationDate,
+                UserId = userEntity.UserId,
+                //SubscriptionPlanId = userEntity.SubscriptionPlanId,
+                Email = userEntity.Email,
+                UserName = userEntity.UserName,
+                //Description = subscriptionPlan.Description,
+                //Name = subscriptionPlan.Name,
+                //Price = subscriptionPlan.Price,
+                Active = userEntity.Active,
+                //ExpirationDate = subscriptionPlan.ExpirationDate,
             };
         }
 
-        public async Task<List<SubscriberByIdResponse>> GetSubscriberListAsync(CancellationToken cancellationToken)
+        public async Task<List<UserByIdResponse>> GetUserListAsync(CancellationToken cancellationToken)
         {
-            var res = await _subscriberRepository.GetSubscriberListAsync();
+            var res = await _userRepository.GetUserListAsync();
 
-            List<SubscriberByIdResponse> listOfSubscriptionPlans = new List<SubscriberByIdResponse>();
+            List<UserByIdResponse> listOfSubscriptionPlans = new List<UserByIdResponse>();
 
             foreach (var item in res)
             {
-                listOfSubscriptionPlans.Add(new SubscriberByIdResponse
+                listOfSubscriptionPlans.Add(new UserByIdResponse
                 {
-                    SubscriberId = item.SubscriberId,
-                    SubscriptionPlanId = item.SubscriptionPlanId,
+                    UserId = item.UserId,
+                    //SubscriptionPlanId = item.SubscriptionPlanId,
                     Email = item.Email,
                     UserName = item.UserName,
                     Active = item.Active,
@@ -98,18 +98,18 @@ namespace NetflixServer.Business.Services
             return listOfSubscriptionPlans;
         }
 
-        public async Task<SubscriberByIdResponse> UpdateSubscriberByIdAsync(long subscriberId, long subscriptionPlanId, DateTime? expirationDate, bool isActiveSubsciber, CancellationToken cancellationToken)
+        public async Task<UserByIdResponse> UpdateUserByIdAsync(long userId, long subscriptionPlanId, DateTime? expirationDate, bool isActiveSubsciber, CancellationToken cancellationToken)
         {
-            var subscriber = await _subscriberRepository.GetSubscriberByIdAsync(subscriberId);
+            var user = await _userRepository.GetUserByIdAsync(userId);
             var subscriptionPlan = await _subscriptionPlanRepository.GetSubscriptionPlanByIdAsync(subscriptionPlanId);
 
-            if (subscriptionPlan == null || subscriber == null)
+            if (subscriptionPlan == null || user == null)
                 return null;
 
-            subscriber.SubscriptionPlanId = subscriptionPlanId;
-            subscriber.Active = isActiveSubsciber;
+            //user.SubscriptionPlanId = subscriptionPlanId;
+            user.Active = isActiveSubsciber;
 
-            await _subscriberRepository.UpdateSubscriberByIdAsync(subscriber);
+            await _userRepository.UpdateUserByIdAsync(user);
 
             if (!isActiveSubsciber)
             {
@@ -117,14 +117,14 @@ namespace NetflixServer.Business.Services
                                     .SendAsync(General.EndpointNameReceiver,
                                         new NotificationCommand
                                         {
-                                            Id = subscriber.SubscriberId,
-                                            Email = subscriber.Email,
-                                            UserName = subscriber.UserName,
-                                            Active = subscriber.Active,
+                                            Id = user.UserId,
+                                            Email = user.Email,
+                                            UserName = user.UserName,
+                                            Active = user.Active,
                                             SubscriptionPlanPrice = subscriptionPlan.Price,
                                             SubscriptionPlanDescription = subscriptionPlan.Description,
                                             SubscriptionPlanName = subscriptionPlan.Name,
-                                            NotificationType = NotificationType.SubscriberDeactivated,
+                                            NotificationType = NotificationType.UserDeactivated,
                                             SubscriptionPlanExpirationDate = null,
                                         });
             }
@@ -134,24 +134,24 @@ namespace NetflixServer.Business.Services
                                 .SendAsync(General.EndpointNameReceiver,
                                     new NotificationCommand
                                     {
-                                        Id = subscriber.SubscriberId,
-                                        Email = subscriber.Email,
-                                        UserName = subscriber.UserName,
-                                        Active = subscriber.Active,
+                                        Id = user.UserId,
+                                        Email = user.Email,
+                                        UserName = user.UserName,
+                                        Active = user.Active,
                                         SubscriptionPlanPrice = subscriptionPlan.Price,
                                         SubscriptionPlanDescription = subscriptionPlan.Description,
                                         SubscriptionPlanName = subscriptionPlan.Name,
-                                        NotificationType = NotificationType.SubscriberActivated,
+                                        NotificationType = NotificationType.UserActivated,
                                         SubscriptionPlanExpirationDate = expirationDate,
                                     });
             }
 
-            return new SubscriberByIdResponse
+            return new UserByIdResponse
             {
-                SubscriberId = subscriber.SubscriberId,
-                SubscriptionPlanId = subscriber.SubscriptionPlanId.Value,
-                Email = subscriber.Email,
-                UserName = subscriber.UserName,
+                UserId = user.UserId,
+                //SubscriptionPlanId = user.SubscriptionPlanId.Value,
+                Email = user.Email,
+                UserName = user.UserName,
             };
         }
     }

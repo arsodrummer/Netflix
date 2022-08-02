@@ -2,7 +2,7 @@
 
 namespace NetflixServer.Models.Requests
 {
-    public class UpdateSubscriberRequest
+    public class UpdateUserRequest
     {
         public long SubscriptionPlanId { get; set; }
 

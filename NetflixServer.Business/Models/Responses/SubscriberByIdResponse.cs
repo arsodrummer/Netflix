@@ -2,9 +2,9 @@
 
 namespace NetflixServer.Business.Models.Responses
 {
-    public class SubscriberByIdResponse
+    public class UserByIdResponse
     {
-        public long SubscriberId { get; set; }
+        public long UserId { get; set; }
 
         public long? SubscriptionPlanId { get; set; }
 

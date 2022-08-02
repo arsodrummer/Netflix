@@ -37,7 +37,7 @@ namespace NetflixServer.NServiceBus.Sagas
                 Subject = subject,
             };
 
-            if (message.NotificationType == NotificationType.SubscriberActivated)
+            if (message.NotificationType == NotificationType.UserActivated)
             {
                 await RequestTimeout(context, TimeSpan.FromSeconds(2), message);
             }

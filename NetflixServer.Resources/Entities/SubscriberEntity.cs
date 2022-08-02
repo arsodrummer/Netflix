@@ -2,14 +2,11 @@
 
 namespace NetflixServer.Resources.Entities
 {
-    [TableName("SUBSCRIBER")]
-    public class SubscriberEntity
+    [TableName("USERS")]
+    public class UserEntity
     {
-        [Column(Name = "ID_SUBSCRIBER")]
-        public long SubscriberId { get; set; }
-
-        [Column(Name = "ID_SUBSCRIPTION_PLAN")]
-        public long? SubscriptionPlanId { get; set; }
+        [Column(Name = "ID")]
+        public long UserId { get; set; }
 
         [Column(Name = "EMAIL")]
         public string Email { get; set; }

@@ -2,9 +2,9 @@
 {
     public enum NotificationType
     {
-        SubscriberCreated,
-        SubscriberActivated,
-        SubscriberDeactivated,
+        UserCreated,
+        UserActivated,
+        UserDeactivated,
         SubscriptionPlanUpdated,
         SubscriptionPlanExpired
     }

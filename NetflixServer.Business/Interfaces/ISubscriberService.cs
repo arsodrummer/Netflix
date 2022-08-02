@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 
 namespace NetflixServer.Business.Interfaces
 {
-    public interface ISubscriberService
+    public interface IUserService
     {
-        Task CreateSubscriberAsync(Subscriber subscriber, CancellationToken cancellationToken);
+        Task CreateUserAsync(User user, CancellationToken cancellationToken);
 
-        Task<SubscriberByIdResponse> GetSubscriberByIdAsync(long subscriberId, CancellationToken cancellationToken);
+        Task<UserByIdResponse> GetUserByIdAsync(long userId, CancellationToken cancellationToken);
 
-        Task<List<SubscriberByIdResponse>> GetSubscriberListAsync(CancellationToken cancellationToken);
+        Task<List<UserByIdResponse>> GetUserListAsync(CancellationToken cancellationToken);
 
-        Task<SubscriberByIdResponse> UpdateSubscriberByIdAsync(long subscriberId, long subscriptionPlanId, DateTime? expirationDate, bool isActiveSubsciber, CancellationToken cancellationToken);
+        Task<UserByIdResponse> UpdateUserByIdAsync(long userId, long subscriptionPlanId, DateTime? expirationDate, bool isActiveSubsciber, CancellationToken cancellationToken);
     }
 }

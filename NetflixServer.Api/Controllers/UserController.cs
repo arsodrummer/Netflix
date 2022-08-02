@@ -13,30 +13,30 @@ namespace NetflixServer.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class SubscriberController : ControllerBase
+    public class UserController : ControllerBase
     {
-        private ISubscriberService _subscriptionService;
+        private IUserService _subscriptionService;
 
-        public SubscriberController(ISubscriberService subscriptionService)
+        public UserController(IUserService subscriptionService)
         {
             _subscriptionService = subscriptionService;
         }
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
-        public async Task<IActionResult> PostAsync([FromBody] NewSubscriberRequest newSubscriberRequest, CancellationToken cancellationToken)
+        public async Task<IActionResult> PostAsync([FromBody] NewUserRequest newUserRequest, CancellationToken cancellationToken)
         {
-            var subscriber = newSubscriberRequest.ToSubscriber();
-            await _subscriptionService.CreateSubscriberAsync(subscriber, cancellationToken);
+            var user = newUserRequest.ToUser();
+            await _subscriptionService.CreateUserAsync(user, cancellationToken);
             return NoContent();
         }
 
         [HttpGet]
         [Route("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetByIdAsync([FromRoute] GetSubscriberQuery getSubscriberQuery, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetByIdAsync([FromRoute] GetUserQuery getUserQuery, CancellationToken cancellationToken)
         {
-            var response = await _subscriptionService.GetSubscriberByIdAsync(getSubscriberQuery.Id, cancellationToken);
+            var response = await _subscriptionService.GetUserByIdAsync(getUserQuery.Id, cancellationToken);
 
             if (response == null)
                 return NotFound();
@@ -49,7 +49,7 @@ namespace NetflixServer.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetListAsync(CancellationToken cancellationToken)
         {
-            var response = await _subscriptionService.GetSubscriberListAsync(cancellationToken);
+            var response = await _subscriptionService.GetUserListAsync(cancellationToken);
 
             if (response == null)
                 return NotFound();
@@ -60,9 +60,9 @@ namespace NetflixServer.Controllers
         [HttpPatch]
         [Route("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> PatchByIdAsync([FromBody] UpdateSubscriberRequest updateSubscriberRequest, [FromRoute] UpdateSubscriberByIdQuery updateSubscriberByIdQuery, CancellationToken cancellationToken)
+        public async Task<IActionResult> PatchByIdAsync([FromBody] UpdateUserRequest updateUserRequest, [FromRoute] UpdateUserByIdQuery updateUserByIdQuery, CancellationToken cancellationToken)
         {
-            var response = await _subscriptionService.UpdateSubscriberByIdAsync(updateSubscriberByIdQuery.Id, updateSubscriberRequest.SubscriptionPlanId, updateSubscriberRequest.ExpirationDate, updateSubscriberRequest.Active, cancellationToken);
+            var response = await _subscriptionService.UpdateUserByIdAsync(updateUserByIdQuery.Id, updateUserRequest.SubscriptionPlanId, updateUserRequest.ExpirationDate, updateUserRequest.Active, cancellationToken);
 
             if (response == null)
                 return BadRequest();

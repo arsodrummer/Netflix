@@ -1,6 +1,6 @@
 ﻿namespace NetflixServer.Business.Domain
 {
-    public class Subscriber
+    public class User
     {
         public string Email { get; set; }
 

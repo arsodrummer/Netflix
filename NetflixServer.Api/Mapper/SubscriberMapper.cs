@@ -3,13 +3,13 @@ using NetflixServer.Models.Requests;
 
 namespace NetflixServer.Api.Mapper
 {
-    public static class SubscriberMapper
+    public static class UserMapper
     {
-        public static Subscriber ToSubscriber(this NewSubscriberRequest newSubscriberRequest) =>
-            new Subscriber
+        public static User ToUser(this NewUserRequest newUserRequest) =>
+            new User
             {
-                UserName = newSubscriberRequest.UserName,
-                Email = newSubscriberRequest.Email,
+                UserName = newUserRequest.UserName,
+                Email = newUserRequest.Email,
                 Active = true,
             };
     }

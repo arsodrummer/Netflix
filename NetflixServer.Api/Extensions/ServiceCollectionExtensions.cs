@@ -15,7 +15,7 @@ namespace NetflixServer.Api.Extensions
     {
         public static IServiceCollection AddDatabaseServices(this IServiceCollection services, IConfiguration configuration) =>
             services
-                .AddTransient<SubscriberRepository>()
+                .AddTransient<UserRepository>()
                 .AddTransient<SubscriptionPlanRepository>()
                 .AddTransient<NetflixDbService>(sp =>
                 {
@@ -36,7 +36,7 @@ namespace NetflixServer.Api.Extensions
 
         public static IServiceCollection AddBusinessServices(this IServiceCollection services, IConfiguration configuration) =>
             services
-                .AddScoped<ISubscriberService, SubscriberService>()
+                .AddScoped<IUserService, UserService>()
                 .AddScoped<ISubscriptionPlanService, SubscriptionPlanService>()
                 .AddTransient<MessageService>();
     }

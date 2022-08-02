@@ -12,13 +12,13 @@ namespace NetflixServer.Business.Services
 {
     public class SubscriptionPlanService : ISubscriptionPlanService
     {
-        public SubscriberRepository _subscriberRepository;
+        public UserRepository _userRepository;
         public SubscriptionPlanRepository _subscriptionPlanRepository;
         public MessageService _messageService;
 
-        public SubscriptionPlanService(SubscriptionPlanRepository subscriptionPlanRepository, SubscriberRepository subscriberRepository, MessageService messageService)
+        public SubscriptionPlanService(SubscriptionPlanRepository subscriptionPlanRepository, UserRepository userRepository, MessageService messageService)
         {
-            _subscriberRepository = subscriberRepository;
+            _userRepository = userRepository;
             _subscriptionPlanRepository = subscriptionPlanRepository;
             _messageService = messageService;
         }
@@ -71,13 +71,13 @@ namespace NetflixServer.Business.Services
         public async Task<SubscriptionPlan> UpdateSubscriptionPlanById(long subscriptionPlanId, decimal price, DateTime? expirationDate, string name, CancellationToken cancellationToken)
         {
             var subscriptionPlanEntity = await _subscriptionPlanRepository.GetSubscriptionPlanByIdAsync(subscriptionPlanId);
-            var subscriberEntity = await _subscriberRepository.GetSubscriberByIdAsync(subscriptionPlanId);
+            var userEntity = await _userRepository.GetUserByIdAsync(subscriptionPlanId);
 
             if (subscriptionPlanEntity == null)
             {
                 return null;
             }
-            else if(subscriptionPlanEntity != null && subscriberEntity == null)
+            else if(subscriptionPlanEntity != null && userEntity == null)
             {
                 subscriptionPlanEntity.Price = price;
                 subscriptionPlanEntity.ExpirationDate = expirationDate;
@@ -91,10 +91,10 @@ namespace NetflixServer.Business.Services
                     .SendAsync(General.EndpointNameReceiver,
                         new NotificationCommand
                         {
-                            Id = subscriberEntity.SubscriberId,
-                            Email = subscriberEntity.Email,
-                            UserName = subscriberEntity.UserName,
-                            Active = subscriberEntity.Active,
+                            Id = userEntity.UserId,
+                            Email = userEntity.Email,
+                            UserName = userEntity.UserName,
+                            Active = userEntity.Active,
                             SubscriptionPlanPrice = subscriptionPlanEntity.Price,
                             SubscriptionPlanDescription = subscriptionPlanEntity.Description,
                             SubscriptionPlanName = subscriptionPlanEntity.Name,
