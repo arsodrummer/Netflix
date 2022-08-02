@@ -6,9 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Scripts\001.CREATE_SUBSCRIBER.sql" />
-    <EmbeddedResource Include="Scripts\002.CREATE_SUBSCRIPTION_PLAN.sql" />
-    <EmbeddedResource Include="Scripts\003.POPULATE_SUBSCRIPTION_PLAN.sql" />
+    <EmbeddedResource Include="Scripts\001.CREATE_USERS.sql" />
+    <EmbeddedResource Include="Scripts\002.CREATE_PLANS.sql" />
+    <EmbeddedResource Include="Scripts\003.CREATE_SUBSCRIPTIONS.sql" />
+    <EmbeddedResource Include="Scripts\004.POPULATE_PLANS.sql" />
   </ItemGroup>
 
   <ItemGroup>
