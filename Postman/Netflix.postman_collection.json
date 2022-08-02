@@ -82,10 +82,10 @@
 			]
 		},
 		{
-			"name": "Subscribers",
+			"name": "Users",
 			"item": [
 				{
-					"name": "Subscriber",
+					"name": "User",
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -99,61 +99,61 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/Subscriber",
+							"raw": "{{BASE_URL}}/User",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
-								"Subscriber"
+								"User"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Subscriber by Id",
+					"name": "User by Id",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{BASE_URL}}/Subscriber/1",
+							"raw": "{{BASE_URL}}/User/4",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
-								"Subscriber",
-								"1"
+								"User",
+								"4"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "List of Subscribers",
+					"name": "List of Users",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{BASE_URL}}/Subscriber/Lits",
+							"raw": "{{BASE_URL}}/User/List",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
-								"Subscriber",
-								"Lits"
+								"User",
+								"List"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Subscriber by Id",
+					"name": "User by Id",
 					"request": {
 						"method": "PATCH",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"subscriptionPlanId\" : 1,\r\n    \"expirationDate\" : \"2022-01-01\",\r\n    \"active\" : true\r\n}",
+							"raw": "{\r\n    /* used for  activating and deactivating users (subscribers) */\r\n    \"subscriptionPlanId\" : 1,\r\n    \"expirationDate\" : \"2023-01-01\",\r\n    \"active\" : true\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
