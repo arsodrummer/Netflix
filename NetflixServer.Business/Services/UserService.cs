@@ -66,14 +66,9 @@ namespace NetflixServer.Business.Services
             return new UserByIdResponse
             {
                 UserId = userEntity.UserId,
-                //SubscriptionPlanId = userEntity.SubscriptionPlanId,
                 Email = userEntity.Email,
                 UserName = userEntity.UserName,
-                //Description = subscriptionPlan.Description,
-                //Name = subscriptionPlan.Name,
-                //Price = subscriptionPlan.Price,
                 Active = userEntity.Active,
-                //ExpirationDate = subscriptionPlan.ExpirationDate,
             };
         }
 
@@ -88,7 +83,6 @@ namespace NetflixServer.Business.Services
                 listOfSubscriptionPlans.Add(new UserByIdResponse
                 {
                     UserId = item.UserId,
-                    //SubscriptionPlanId = item.SubscriptionPlanId,
                     Email = item.Email,
                     UserName = item.UserName,
                     Active = item.Active,
@@ -98,10 +92,10 @@ namespace NetflixServer.Business.Services
             return listOfSubscriptionPlans;
         }
 
-        public async Task<UserByIdResponse> UpdateUserByIdAsync(long userId, long subscriptionPlanId, DateTime? expirationDate, bool isActiveSubsciber, CancellationToken cancellationToken)
+        public async Task<UserByIdResponse> UpdateUserByIdAsync(long userId, bool isActiveSubsciber, CancellationToken cancellationToken)
         {
             var user = await _userRepository.GetUserByIdAsync(userId);
-            var subscriptionPlan = await _subscriptionPlanRepository.GetSubscriptionPlanByIdAsync(subscriptionPlanId);
+            object subscriptionPlan = null;//await _subscriptionPlanRepository.GetSubscriptionPlanByIdAsync(subscriptionPlanId);
 
             if (subscriptionPlan == null || user == null)
                 return null;
@@ -121,9 +115,9 @@ namespace NetflixServer.Business.Services
                                             Email = user.Email,
                                             UserName = user.UserName,
                                             Active = user.Active,
-                                            SubscriptionPlanPrice = subscriptionPlan.Price,
-                                            SubscriptionPlanDescription = subscriptionPlan.Description,
-                                            SubscriptionPlanName = subscriptionPlan.Name,
+                                            //SubscriptionPlanPrice = subscriptionPlan.Price,
+                                            //SubscriptionPlanDescription = subscriptionPlan.Description,
+                                            //SubscriptionPlanName = subscriptionPlan.Name,
                                             NotificationType = NotificationType.UserDeactivated,
                                             SubscriptionPlanExpirationDate = null,
                                         });
@@ -138,11 +132,11 @@ namespace NetflixServer.Business.Services
                                         Email = user.Email,
                                         UserName = user.UserName,
                                         Active = user.Active,
-                                        SubscriptionPlanPrice = subscriptionPlan.Price,
-                                        SubscriptionPlanDescription = subscriptionPlan.Description,
-                                        SubscriptionPlanName = subscriptionPlan.Name,
+                                        //SubscriptionPlanPrice = subscriptionPlan.Price,
+                                        //SubscriptionPlanDescription = subscriptionPlan.Description,
+                                        //SubscriptionPlanName = subscriptionPlan.Name,
                                         NotificationType = NotificationType.UserActivated,
-                                        SubscriptionPlanExpirationDate = expirationDate,
+                                        //SubscriptionPlanExpirationDate = expirationDate,
                                     });
             }
 

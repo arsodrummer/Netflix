@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using NetflixServer.Api.Mapper;
 using NetflixServer.Api.Models.Queries;
 using NetflixServer.Business.Interfaces;
-using NetflixServer.Business.Models.Responses;
 using NetflixServer.Models.Queries;
 using NetflixServer.Models.Requests;
 using System.Threading;
@@ -15,11 +14,11 @@ namespace NetflixServer.Controllers
     [Route("[controller]")]
     public class UserController : ControllerBase
     {
-        private IUserService _subscriptionService;
+        private IUserService _userService;
 
         public UserController(IUserService subscriptionService)
         {
-            _subscriptionService = subscriptionService;
+            _userService = subscriptionService;
         }
 
         [HttpPost]
@@ -27,7 +26,7 @@ namespace NetflixServer.Controllers
         public async Task<IActionResult> PostAsync([FromBody] NewUserRequest newUserRequest, CancellationToken cancellationToken)
         {
             var user = newUserRequest.ToUser();
-            await _subscriptionService.CreateUserAsync(user, cancellationToken);
+            await _userService.CreateUserAsync(user, cancellationToken);
             return NoContent();
         }
 
@@ -36,7 +35,7 @@ namespace NetflixServer.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetByIdAsync([FromRoute] GetUserQuery getUserQuery, CancellationToken cancellationToken)
         {
-            var response = await _subscriptionService.GetUserByIdAsync(getUserQuery.Id, cancellationToken);
+            var response = await _userService.GetUserByIdAsync(getUserQuery.Id, cancellationToken);
 
             if (response == null)
                 return NotFound();
@@ -49,7 +48,7 @@ namespace NetflixServer.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetListAsync(CancellationToken cancellationToken)
         {
-            var response = await _subscriptionService.GetUserListAsync(cancellationToken);
+            var response = await _userService.GetUserListAsync(cancellationToken);
 
             if (response == null)
                 return NotFound();
@@ -62,7 +61,7 @@ namespace NetflixServer.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> PatchByIdAsync([FromBody] UpdateUserRequest updateUserRequest, [FromRoute] UpdateUserByIdQuery updateUserByIdQuery, CancellationToken cancellationToken)
         {
-            var response = await _subscriptionService.UpdateUserByIdAsync(updateUserByIdQuery.Id, updateUserRequest.SubscriptionPlanId, updateUserRequest.ExpirationDate, updateUserRequest.Active, cancellationToken);
+            var response = await _userService.UpdateUserByIdAsync(updateUserByIdQuery.Id, updateUserRequest.Active, cancellationToken);
 
             if (response == null)
                 return BadRequest();
