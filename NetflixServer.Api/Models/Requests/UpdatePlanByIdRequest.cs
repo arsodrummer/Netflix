@@ -1,14 +1,12 @@
 ﻿using System;
 
-namespace NetflixServer.Models.Requests
+namespace NetflixServer.Api.Models.Requests
 {
-    public class NewSubscriptionPlanRequest
+    public class UpdatePlanByIdRequest
     {
         public decimal Price { get; set; }
 
         public string Name { get; set; }
-
-        public string Description { get; set; }
 
         public DateTime? ExpirationDate { get; set; }
     }

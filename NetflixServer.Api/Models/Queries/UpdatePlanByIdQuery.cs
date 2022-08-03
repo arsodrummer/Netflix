@@ -1,6 +1,6 @@
 ﻿namespace NetflixServer.Api.Models.Queries
 {
-    public class UpdateSubscriptionPlanByIdQuery
+    public class UpdatePlanByIdQuery
     {
         public long Id { get; set; }
     }

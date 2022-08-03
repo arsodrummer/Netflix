@@ -14,21 +14,21 @@ namespace NetflixServer.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class SubscriptionPlanController : ControllerBase
+    public class PlanController : ControllerBase
     {
-        private ISubscriptionPlanService _subscriptionPlanService;
+        private IPlanService _planService;
 
-        public SubscriptionPlanController(ISubscriptionPlanService subscriptionPlanService)
+        public PlanController(IPlanService planService)
         {
-            _subscriptionPlanService = subscriptionPlanService;
+            _planService = planService;
         }
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
-        public async Task<IActionResult> PostAsync([FromBody] NewSubscriptionPlanRequest newSubscriptionPlanRequest, CancellationToken cancellationToken)
+        public async Task<IActionResult> PostAsync([FromBody] NewPlanRequest newPlanRequest, CancellationToken cancellationToken)
         {
-            var subscriptionPlan = newSubscriptionPlanRequest.ToSubscriptionPlan();
-            await _subscriptionPlanService.CreateSubscriptionPlanAsync(subscriptionPlan, cancellationToken);
+            var plan = newPlanRequest.ToSubscriptionPlan();
+            await _planService.CreatePlanAsync(plan, cancellationToken);
             return NoContent();
         }
 
@@ -37,7 +37,7 @@ namespace NetflixServer.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetByIdAsync([FromRoute] GetUserQuery getUserQuery, CancellationToken cancellationToken)
         {
-            var response = await _subscriptionPlanService.GetSubscriptionPlanByIdAsync(getUserQuery.Id, cancellationToken);
+            var response = await _planService.GetPlanByIdAsync(getUserQuery.Id, cancellationToken);
 
             if (response == null)
                 return NotFound();
@@ -50,7 +50,7 @@ namespace NetflixServer.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetListAsync(CancellationToken cancellationToken)
         {
-            var response = await _subscriptionPlanService.GetSubscriptionPlanListAsync(cancellationToken);
+            var response = await _planService.GetPlanListAsync(cancellationToken);
 
             if (response == null)
                 return NotFound();
@@ -61,12 +61,12 @@ namespace NetflixServer.Controllers
         [HttpPatch]
         [Route("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> PatchByIdAsync([FromBody] UpdateSubscriptionPlanByIdRequest updateSubscriptionPlanByIdRequest, [FromRoute] UpdateSubscriptionPlanByIdQuery updateSubscriptionPlanByIdQuery, CancellationToken cancellationToken)
+        public async Task<IActionResult> PatchByIdAsync([FromBody] UpdatePlanByIdRequest updatePlanByIdRequest, [FromRoute] UpdatePlanByIdQuery updatePlanByIdQuery, CancellationToken cancellationToken)
         {
-            var response = await _subscriptionPlanService.UpdateSubscriptionPlanById(updateSubscriptionPlanByIdQuery.Id,
-                updateSubscriptionPlanByIdRequest.Price,
-                updateSubscriptionPlanByIdRequest.ExpirationDate,
-                updateSubscriptionPlanByIdRequest.Name,
+            var response = await _planService.UpdatePlanById(updatePlanByIdQuery.Id,
+                updatePlanByIdRequest.Price,
+                updatePlanByIdRequest.ExpirationDate,
+                updatePlanByIdRequest.Name,
                 cancellationToken);
 
             if (response == null)

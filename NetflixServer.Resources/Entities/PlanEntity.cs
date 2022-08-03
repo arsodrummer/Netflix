@@ -3,11 +3,11 @@ using System;
 
 namespace NetflixServer.Resources.Entities
 {
-    [TableName("SUBSCRIPTION_PLAN")]
-    public class SubscriptionPlanEntity
+    [TableName("PLANS")]
+    public class PlanEntity
     {
-        [Column(Name = "ID_SUBSCRIPTION_PLAN")]
-        public long SubscriptionPlanId { get; set; }
+        [Column(Name = "ID")]
+        public long PlanId { get; set; }
 
         [Column(Name = "PRICE")]
         public decimal Price { get; set; }

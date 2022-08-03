@@ -15,10 +15,10 @@ namespace NetflixServer.Business.Services
     public class UserService : IUserService
     {
         public UserRepository _userRepository;
-        public SubscriptionPlanRepository _subscriptionPlanRepository;
+        public PlanRepository _subscriptionPlanRepository;
         public MessageService _messageService;
 
-        public UserService(UserRepository userRepository, SubscriptionPlanRepository subscriptionPlanRepository, MessageService messageService)
+        public UserService(UserRepository userRepository, PlanRepository subscriptionPlanRepository, MessageService messageService)
         {
             _userRepository = userRepository;
             _subscriptionPlanRepository = subscriptionPlanRepository;

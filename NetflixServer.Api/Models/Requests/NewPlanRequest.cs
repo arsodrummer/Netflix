@@ -1,11 +1,9 @@
 ﻿using System;
 
-namespace NetflixServer.Business.Domain
+namespace NetflixServer.Models.Requests
 {
-    public class SubscriptionPlan
+    public class NewPlanRequest
     {
-        public long SubscriptionPlanId { get; set; }
-
         public decimal Price { get; set; }
 
         public string Name { get; set; }
