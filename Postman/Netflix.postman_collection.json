@@ -6,10 +6,10 @@
 	},
 	"item": [
 		{
-			"name": "Subscription plans",
+			"name": "Plans",
 			"item": [
 				{
-					"name": "Subscription plan",
+					"name": "Plan",
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -23,29 +23,29 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/SubscriptionPlan",
+							"raw": "{{BASE_URL}}/Plan",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
-								"SubscriptionPlan"
+								"Plan"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "List of Subscription plans",
+					"name": "List of Plans",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{BASE_URL}}/SubscriptionPlan/List",
+							"raw": "{{BASE_URL}}/Plan/List",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
-								"SubscriptionPlan",
+								"Plan",
 								"List"
 							]
 						}
@@ -53,7 +53,7 @@
 					"response": []
 				},
 				{
-					"name": "Subscription plan by Id",
+					"name": "Plan by Id",
 					"request": {
 						"method": "PATCH",
 						"header": [],
@@ -67,12 +67,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/SubscriptionPlan/1",
+							"raw": "{{BASE_URL}}/Plan/1",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
-								"SubscriptionPlan",
+								"Plan",
 								"1"
 							]
 						}
