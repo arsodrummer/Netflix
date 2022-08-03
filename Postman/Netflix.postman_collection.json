@@ -59,7 +59,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"price\" : 5,\r\n    \"name\" : \"Super plan\",\r\n    \"expirationDate\" : \"2022-01-01\"\r\n}",
+							"raw": "{\r\n    \"expirationDate\" : \"2022-01-01\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -153,7 +153,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    /* used for  activating and deactivating users (subscribers) */\r\n    \"subscriptionPlanId\" : 1,\r\n    \"expirationDate\" : \"2023-01-01\",\r\n    \"active\" : true\r\n}",
+							"raw": "{\r\n    \"active\" : true\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
