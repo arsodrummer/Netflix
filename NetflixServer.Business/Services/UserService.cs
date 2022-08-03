@@ -15,13 +15,13 @@ namespace NetflixServer.Business.Services
     public class UserService : IUserService
     {
         public UserRepository _userRepository;
-        public PlanRepository _subscriptionPlanRepository;
+        public PlanRepository _planRepository;
         public MessageService _messageService;
 
-        public UserService(UserRepository userRepository, PlanRepository subscriptionPlanRepository, MessageService messageService)
+        public UserService(UserRepository userRepository, PlanRepository planRepository, MessageService messageService)
         {
             _userRepository = userRepository;
-            _subscriptionPlanRepository = subscriptionPlanRepository;
+            _planRepository = planRepository;
             _messageService = messageService;
         }
 
@@ -76,11 +76,11 @@ namespace NetflixServer.Business.Services
         {
             var res = await _userRepository.GetUserListAsync();
 
-            List<UserByIdResponse> listOfSubscriptionPlans = new List<UserByIdResponse>();
+            List<UserByIdResponse> listOfUsers = new List<UserByIdResponse>();
 
             foreach (var item in res)
             {
-                listOfSubscriptionPlans.Add(new UserByIdResponse
+                listOfUsers.Add(new UserByIdResponse
                 {
                     UserId = item.UserId,
                     Email = item.Email,
@@ -89,7 +89,7 @@ namespace NetflixServer.Business.Services
                 });
             }
 
-            return listOfSubscriptionPlans;
+            return listOfUsers;
         }
 
         public async Task<UserByIdResponse> UpdateUserByIdAsync(long userId, bool isActiveSubsciber, CancellationToken cancellationToken)

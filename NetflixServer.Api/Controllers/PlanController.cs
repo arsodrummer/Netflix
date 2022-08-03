@@ -27,7 +27,7 @@ namespace NetflixServer.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         public async Task<IActionResult> PostAsync([FromBody] NewPlanRequest newPlanRequest, CancellationToken cancellationToken)
         {
-            var plan = newPlanRequest.ToSubscriptionPlan();
+            var plan = newPlanRequest.ToPlan();
             await _planService.CreatePlanAsync(plan, cancellationToken);
             return NoContent();
         }
