@@ -95,57 +95,57 @@ namespace NetflixServer.Business.Services
         public async Task<UserByIdResponse> UpdateUserByIdAsync(long userId, bool isActiveSubsciber, CancellationToken cancellationToken)
         {
             var user = await _userRepository.GetUserByIdAsync(userId);
-            object subscriptionPlan = null;//await _subscriptionPlanRepository.GetSubscriptionPlanByIdAsync(subscriptionPlanId);
 
-            if (subscriptionPlan == null || user == null)
+            if (user == null)
                 return null;
 
+            object subscriptionPlan = null;//await _subscriptionPlanRepository.GetSubscriptionPlanByIdAsync(subscriptionPlanId);
             //user.SubscriptionPlanId = subscriptionPlanId;
             user.Active = isActiveSubsciber;
 
             await _userRepository.UpdateUserByIdAsync(user);
 
-            if (!isActiveSubsciber)
-            {
-                await _messageService
-                                    .SendAsync(General.EndpointNameReceiver,
-                                        new NotificationCommand
-                                        {
-                                            Id = user.UserId,
-                                            Email = user.Email,
-                                            UserName = user.UserName,
-                                            Active = user.Active,
-                                            //SubscriptionPlanPrice = subscriptionPlan.Price,
-                                            //SubscriptionPlanDescription = subscriptionPlan.Description,
-                                            //SubscriptionPlanName = subscriptionPlan.Name,
-                                            NotificationType = NotificationType.UserDeactivated,
-                                            SubscriptionPlanExpirationDate = null,
-                                        });
-            }
-            else
-            {
-                await _messageService
-                                .SendAsync(General.EndpointNameReceiver,
-                                    new NotificationCommand
-                                    {
-                                        Id = user.UserId,
-                                        Email = user.Email,
-                                        UserName = user.UserName,
-                                        Active = user.Active,
-                                        //SubscriptionPlanPrice = subscriptionPlan.Price,
-                                        //SubscriptionPlanDescription = subscriptionPlan.Description,
-                                        //SubscriptionPlanName = subscriptionPlan.Name,
-                                        NotificationType = NotificationType.UserActivated,
-                                        //SubscriptionPlanExpirationDate = expirationDate,
-                                    });
-            }
+            //if (!isActiveSubsciber)
+            //{
+            //    await _messageService
+            //                        .SendAsync(General.EndpointNameReceiver,
+            //                            new NotificationCommand
+            //                            {
+            //                                Id = user.UserId,
+            //                                Email = user.Email,
+            //                                UserName = user.UserName,
+            //                                Active = user.Active,
+            //                                //SubscriptionPlanPrice = subscriptionPlan.Price,
+            //                                //SubscriptionPlanDescription = subscriptionPlan.Description,
+            //                                //SubscriptionPlanName = subscriptionPlan.Name,
+            //                                NotificationType = NotificationType.UserDeactivated,
+            //                                SubscriptionPlanExpirationDate = null,
+            //                            });
+            //}
+            //else
+            //{
+            //    await _messageService
+            //                    .SendAsync(General.EndpointNameReceiver,
+            //                        new NotificationCommand
+            //                        {
+            //                            Id = user.UserId,
+            //                            Email = user.Email,
+            //                            UserName = user.UserName,
+            //                            Active = user.Active,
+            //                            //SubscriptionPlanPrice = subscriptionPlan.Price,
+            //                            //SubscriptionPlanDescription = subscriptionPlan.Description,
+            //                            //SubscriptionPlanName = subscriptionPlan.Name,
+            //                            NotificationType = NotificationType.UserActivated,
+            //                            //SubscriptionPlanExpirationDate = expirationDate,
+            //                        });
+            //}
 
             return new UserByIdResponse
             {
                 UserId = user.UserId,
-                //SubscriptionPlanId = user.SubscriptionPlanId.Value,
                 Email = user.Email,
                 UserName = user.UserName,
+                Active=user.Active,
             };
         }
     }

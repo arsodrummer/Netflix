@@ -66,11 +66,10 @@ namespace NetflixServer.Resources.Repositories
         {
             try
             {
-                await _netflixDbService.ExecuteAsync(new Sql($"UPDATE USERS SET ID_SUBSCRIPTION_PLAN = '{userEntity.UserId}' WHERE ID = '{userEntity.UserId}'")); // TODO: fix this query
+                await _netflixDbService.ExecuteAsync(new Sql($"UPDATE USERS SET ACTIVE = '{Convert.ToInt32(userEntity.Active)}' WHERE ID = '{userEntity.UserId}'"));
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
         }

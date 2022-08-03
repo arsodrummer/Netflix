@@ -1,4 +1,5 @@
-﻿using PetaPoco;
+﻿using NetflixServer.Resources.Attributes;
+using PetaPoco;
 
 namespace NetflixServer.Resources.Entities
 {

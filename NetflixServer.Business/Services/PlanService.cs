@@ -68,7 +68,7 @@ namespace NetflixServer.Business.Services
             return listOfPlans;
         }
 
-        public async Task<Plan> UpdatePlanById(long planId, decimal price, DateTime? expirationDate, string name, CancellationToken cancellationToken)
+        public async Task<Plan> UpdatePlanById(long planId, DateTime? expirationDate, CancellationToken cancellationToken)
         {
             var planEntity = await _planRepository.GetPlanByIdAsync(planId);
             var userEntity = await _userRepository.GetUserByIdAsync(planId);
@@ -79,9 +79,7 @@ namespace NetflixServer.Business.Services
             }
             else if(planEntity != null && userEntity == null)
             {
-                planEntity.Price = price;
                 planEntity.ExpirationDate = expirationDate;
-                planEntity.Name = name;
 
                 await _planRepository.UpdatePlanByIdAsync(planEntity);
             }
@@ -104,7 +102,6 @@ namespace NetflixServer.Business.Services
 
             return new Plan
             {
-                Price = price,
                 ExpirationDate = expirationDate,
                 Description = planEntity.Description,
                 Name = planEntity.Name,
