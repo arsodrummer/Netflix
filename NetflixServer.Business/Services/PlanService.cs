@@ -1,5 +1,6 @@
 ﻿using NetflixServer.Business.Domain;
 using NetflixServer.Business.Interfaces;
+using NetflixServer.Business.Models.Responses;
 using NetflixServer.Resources.Repositories;
 using NetflixServer.Resources.Services;
 using NetflixServer.Shared;
@@ -28,7 +29,7 @@ namespace NetflixServer.Business.Services
             await _planRepository.InsertPlanAsync(plan.Name, plan.Price, plan.Description, plan.ExpirationDate);
         }
 
-        public async Task<Plan> GetPlanByIdAsync(long planId, CancellationToken cancellationToken)
+        public async Task<PlanByIdResponse> GetPlanByIdAsync(long planId, CancellationToken cancellationToken)
         {
             var planEntity = await _planRepository.GetPlanByIdAsync(planId);
 
@@ -37,7 +38,7 @@ namespace NetflixServer.Business.Services
                 return null;
             }
 
-            return new Plan
+            return new PlanByIdResponse
             {
                 PlanId = planEntity.PlanId,
                 Description = planEntity.Description,
@@ -47,15 +48,15 @@ namespace NetflixServer.Business.Services
             };
         }
 
-        public async Task<List<Plan>> GetPlanListAsync(CancellationToken cancellationToken)
+        public async Task<List<PlanByIdResponse>> GetPlanListAsync(CancellationToken cancellationToken)
         {
             var res = await _planRepository.GetPlanListAsync();
 
-            List<Plan> listOfPlans = new List<Plan>();
+            List<PlanByIdResponse> listOfPlans = new List<PlanByIdResponse>();
 
             foreach (var item in res)
             {
-                listOfPlans.Add(new Plan
+                listOfPlans.Add(new PlanByIdResponse
                 {
                     PlanId = item.PlanId,
                     Description = item.Description,
@@ -68,7 +69,7 @@ namespace NetflixServer.Business.Services
             return listOfPlans;
         }
 
-        public async Task<Plan> UpdatePlanById(long planId, DateTime? expirationDate, CancellationToken cancellationToken)
+        public async Task<PlanByIdResponse> UpdatePlanById(long planId, DateTime? expirationDate, CancellationToken cancellationToken)
         {
             var planEntity = await _planRepository.GetPlanByIdAsync(planId);
             var userEntity = await _userRepository.GetUserByIdAsync(planId);
@@ -100,7 +101,7 @@ namespace NetflixServer.Business.Services
                         });
             }
 
-            return new Plan
+            return new PlanByIdResponse
             {
                 ExpirationDate = expirationDate,
                 Description = planEntity.Description,

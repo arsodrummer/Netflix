@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-
 namespace NetflixServer.Business.Services
 {
     public class UserService : IUserService

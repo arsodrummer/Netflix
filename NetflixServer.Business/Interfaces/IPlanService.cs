@@ -1,4 +1,5 @@
 ﻿using NetflixServer.Business.Domain;
+using NetflixServer.Business.Models.Responses;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -10,10 +11,10 @@ namespace NetflixServer.Business.Interfaces
     {
         Task CreatePlanAsync(Plan plan, CancellationToken cancellationToken);
 
-        Task<Plan> GetPlanByIdAsync(long planId, CancellationToken cancellationToken);
+        Task<PlanByIdResponse> GetPlanByIdAsync(long planId, CancellationToken cancellationToken);
 
-        Task<List<Plan>> GetPlanListAsync(CancellationToken cancellationToken);
+        Task<List<PlanByIdResponse>> GetPlanListAsync(CancellationToken cancellationToken);
 
-        Task<Plan> UpdatePlanById(long planId, DateTime? expirationDate, CancellationToken cancellationToken);
+        Task<PlanByIdResponse> UpdatePlanById(long planId, DateTime? expirationDate, CancellationToken cancellationToken);
     }
 }
