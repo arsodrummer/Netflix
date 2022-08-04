@@ -1,9 +1,7 @@
-﻿using System;
-
-namespace NetflixServer.Api.Models.Requests
+﻿namespace NetflixServer.Api.Models.Requests
 {
     public class UpdatePlanByIdRequest
     {
-        public DateTime? ExpirationDate { get; set; }
+        public decimal Price { get; set; }
     }
 }

@@ -44,7 +44,6 @@ namespace NetflixServer.Business.Services
                 Description = planEntity.Description,
                 Name = planEntity.Name,
                 Price = planEntity.Price,
-                ExpirationDate = planEntity.ExpirationDate,
             };
         }
 
@@ -62,48 +61,42 @@ namespace NetflixServer.Business.Services
                     Description = item.Description,
                     Name = item.Name,
                     Price = item.Price,
-                    ExpirationDate = item.ExpirationDate,
                 });
             }
 
             return listOfPlans;
         }
 
-        public async Task<PlanByIdResponse> UpdatePlanById(long planId, DateTime? expirationDate, CancellationToken cancellationToken)
+        public async Task<PlanByIdResponse> UpdatePlanById(long planId, decimal price, CancellationToken cancellationToken)
         {
             var planEntity = await _planRepository.GetPlanByIdAsync(planId);
-            var userEntity = await _userRepository.GetUserByIdAsync(planId);
 
             if (planEntity == null)
             {
                 return null;
             }
-            else if(planEntity != null && userEntity == null)
-            {
-                planEntity.ExpirationDate = expirationDate;
 
-                await _planRepository.UpdatePlanByIdAsync(planEntity);
-            }
-            else
-            {
-                await _messageService
-                    .SendAsync(General.EndpointNameReceiver,
-                        new NotificationCommand
-                        {
-                            Id = userEntity.UserId,
-                            Email = userEntity.Email,
-                            UserName = userEntity.UserName,
-                            Active = userEntity.Active,
-                            SubscriptionPlanPrice = planEntity.Price,
-                            SubscriptionPlanDescription = planEntity.Description,
-                            SubscriptionPlanName = planEntity.Name,
-                            NotificationType = NotificationType.SubscriptionPlanUpdated,
-                        });
-            }
+            planEntity.Price = price;
+            await _planRepository.UpdatePlanByIdAsync(planEntity);
+
+            //{
+            //    await _messageService
+            //        .SendAsync(General.EndpointNameReceiver,
+            //            new NotificationCommand
+            //            {
+            //                Id = userEntity.UserId,
+            //                Email = userEntity.Email,
+            //                UserName = userEntity.UserName,
+            //                Active = userEntity.Active,
+            //                SubscriptionPlanPrice = planEntity.Price,
+            //                SubscriptionPlanDescription = planEntity.Description,
+            //                SubscriptionPlanName = planEntity.Name,
+            //                NotificationType = NotificationType.SubscriptionPlanUpdated,
+            //            });
+            //}
 
             return new PlanByIdResponse
             {
-                ExpirationDate = expirationDate,
                 Description = planEntity.Description,
                 Name = planEntity.Name,
                 PlanId = planEntity.PlanId,

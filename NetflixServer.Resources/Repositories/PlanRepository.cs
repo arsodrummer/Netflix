@@ -28,7 +28,6 @@ namespace NetflixServer.Resources.Repositories
                     Description = description,
                     Name = name,
                     Price = price,
-                    ExpirationDate = expirationDate,
                 });
             }
             catch (Exception ex)
@@ -65,12 +64,7 @@ namespace NetflixServer.Resources.Repositories
         {
             try
             {
-                await _netflixDbService.ExecuteAsync(new Sql(@$"UPDATE PLANS
-                                                                SET 
-                                                                    EXPIRATION_DATE = '{planEntity.ExpirationDate}',
-                                                                    PRICE = '{planEntity.Price}',
-                                                                    NAME = '{planEntity.Name}'
-                                                                WHERE ID = '{planEntity.PlanId}'"));
+                await _netflixDbService.ExecuteAsync(new Sql(@$"UPDATE PLANS SET PRICE = '{planEntity.Price}' WHERE ID = '{planEntity.PlanId}'"));
             }
             catch (Exception ex)
             {
