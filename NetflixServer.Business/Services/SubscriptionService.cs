@@ -26,11 +26,11 @@ namespace NetflixServer.Business.Services
         {
             var res = await _subscriptionRepository.GetSubscriptionListAsync();
 
-            List<SubscriptionByIdResponse> listOfPlans = new List<SubscriptionByIdResponse>();
+            List<SubscriptionByIdResponse> listOfSubscriptions = new List<SubscriptionByIdResponse>();
 
             foreach (var item in res)
             {
-                listOfPlans.Add(new SubscriptionByIdResponse
+                listOfSubscriptions.Add(new SubscriptionByIdResponse
                 {
                     Id = item.SubscriptionId,
                     UserId = item.UserId,
@@ -39,7 +39,12 @@ namespace NetflixServer.Business.Services
                 });
             }
 
-            return listOfPlans;
+            return listOfSubscriptions;
+        }
+
+        public async Task DeleteSubscriptionByIdAsync(long id, CancellationToken cancellationToken)
+        {
+            await _subscriptionRepository.DeleteSubscriptionAsync(id);
         }
     }
 }

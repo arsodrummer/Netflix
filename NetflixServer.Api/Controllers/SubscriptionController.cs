@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NetflixServer.Api.Mapper;
+using NetflixServer.Api.Models.Queries;
 using NetflixServer.Api.Models.Requests;
 using NetflixServer.Business.Interfaces;
 using System.Threading;
@@ -39,6 +40,15 @@ namespace NetflixServer.Api.Controllers
                 return NotFound();
 
             return Ok(response);
+        }
+
+        [HttpDelete]
+        [Route("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<IActionResult> DeleteAsync([FromRoute] DeleteSubscriptionByIdQuery deleteSubscriptionByIdQuery, CancellationToken cancellationToken)
+        {
+            await _subscriptionService.DeleteSubscriptionByIdAsync(deleteSubscriptionByIdQuery.Id, cancellationToken);
+            return NoContent();
         }
     }
 }

@@ -11,5 +11,7 @@ namespace NetflixServer.Business.Interfaces
         Task CreateSubscriptionAsync(long userId, long planId, DateTime expirationDate, CancellationToken cancellationToken);
 
         Task<List<SubscriptionByIdResponse>> GetSubscriptionListAsync(CancellationToken cancellationToken);
+
+        Task DeleteSubscriptionByIdAsync(long id, CancellationToken cancellationToken);
     }
 }

@@ -50,6 +50,18 @@ namespace NetflixServer.Resources.Repositories
             }
         }
 
+        public async Task DeleteSubscriptionAsync(long id)
+        {
+            try
+            {
+                await _netflixDbService.ExecuteAsync(new Sql($"DELETE FROM SUBSCRIPTIONS WHERE SUBSCRIPTIONS.ID = '{id}'"));
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         private Task<long> GetNextSequenceValueAsync() =>
             _netflixDbService.ExecuteScalarAsync<long>(new Sql($"SELECT NEXT VALUE FOR SUBSCRIPTION_PLAN_SEQ"));
     }
