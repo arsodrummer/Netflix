@@ -27,5 +27,18 @@ namespace NetflixServer.Api.Controllers
             await _subscriptionService.CreateSubscriptionAsync(subscription.UserId, subscription.PlanId, subscription.ExpirationDate, cancellationToken);
             return NoContent();
         }
+
+        [HttpGet]
+        [Route("List")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetListAsync(CancellationToken cancellationToken)
+        {
+            var response = await _subscriptionService.GetSubscriptionListAsync(cancellationToken);
+
+            if (response == null)
+                return NotFound();
+
+            return Ok(response);
+        }
     }
 }
