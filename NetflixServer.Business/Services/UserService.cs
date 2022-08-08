@@ -44,9 +44,7 @@ namespace NetflixServer.Business.Services
             var userEntity = await _userRepository.GetUserByIdAsync(userId);
 
             if (userEntity == null)
-            {
                 return null;
-            }
 
             //if (!userEntity.SubscriptionPlanId.HasValue)
             //{
@@ -91,16 +89,14 @@ namespace NetflixServer.Business.Services
             return listOfUsers;
         }
 
-        public async Task<UserByIdResponse> UpdateUserByIdAsync(long userId, bool isActiveSubsciber, CancellationToken cancellationToken)
+        public async Task<UserByIdResponse> UpdateUserByIdAsync(long userId, bool isActiveUser, CancellationToken cancellationToken)
         {
             var user = await _userRepository.GetUserByIdAsync(userId);
 
             if (user == null)
                 return null;
 
-            object subscriptionPlan = null;//await _subscriptionPlanRepository.GetSubscriptionPlanByIdAsync(subscriptionPlanId);
-            //user.SubscriptionPlanId = subscriptionPlanId;
-            user.Active = isActiveSubsciber;
+            user.Active = isActiveUser;
 
             await _userRepository.UpdateUserByIdAsync(user);
 

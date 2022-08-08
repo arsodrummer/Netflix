@@ -34,9 +34,7 @@ namespace NetflixServer.Business.Services
             var planEntity = await _planRepository.GetPlanByIdAsync(planId);
 
             if (planEntity == null)
-            {
                 return null;
-            }
 
             return new PlanByIdResponse
             {
@@ -72,11 +70,10 @@ namespace NetflixServer.Business.Services
             var planEntity = await _planRepository.GetPlanByIdAsync(planId);
 
             if (planEntity == null)
-            {
                 return null;
-            }
 
             planEntity.Price = price;
+
             await _planRepository.UpdatePlanByIdAsync(planEntity);
 
             //{
