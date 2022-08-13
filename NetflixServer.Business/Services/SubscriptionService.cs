@@ -1,6 +1,9 @@
 ﻿using NetflixServer.Business.Interfaces;
 using NetflixServer.Business.Models.Responses;
 using NetflixServer.Resources.Repositories;
+using NetflixServer.Resources.Services;
+using NetflixServer.Shared;
+using NetflixServer.Shared.Commands;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -11,6 +14,9 @@ namespace NetflixServer.Business.Services
     public class SubscriptionService : ISubscriptionService
     {
         public SubscriptionRepository _subscriptionRepository;
+        public UserRepository _userRepository;
+        public PlanRepository _planRepository;
+        public MessageService _messageService;
 
         public SubscriptionService(SubscriptionRepository subscriptionRepository)
         {
@@ -19,32 +25,68 @@ namespace NetflixServer.Business.Services
 
         public async Task CreateSubscriptionAsync(long userId, long planId, DateTime expirationDate, CancellationToken cancellationToken)
         {
-            await _subscriptionRepository.InsertSubscriptionAsync(userId, planId, expirationDate);
+            var subscriptionId = await _subscriptionRepository.InsertSubscriptionAsync(userId, planId, expirationDate);
+
+            var planEntity = await _planRepository.GetPlanByIdAsync(planId);
+
+            var userEntity = await _userRepository.GetUserByIdAsync(userId);
+
+            if (userEntity != null && planEntity != null)
+                await _messageService
+                        .SendAsync(General.EndpointNameReceiver,
+                            new SubscriptionNotificationCommand
+                            {
+                                Id = subscriptionId,
+                                PlanName = planEntity.Name,
+                                PlanPrice = planEntity.Price,
+                                UserEmail = userEntity.Email,
+                                UserName = userEntity.UserName,
+                                NotificationType = NotificationType.SubscriptionPlanActivated,
+                            });
         }
 
         public async Task<List<SubscriptionByIdResponse>> GetSubscriptionListAsync(CancellationToken cancellationToken)
         {
-            var res = await _subscriptionRepository.GetSubscriptionListAsync();
+            var subscriptions = await _subscriptionRepository.GetSubscriptionListAsync();
 
             List<SubscriptionByIdResponse> listOfSubscriptions = new List<SubscriptionByIdResponse>();
 
-            foreach (var item in res)
+            foreach (var subscription in subscriptions)
             {
                 listOfSubscriptions.Add(new SubscriptionByIdResponse
                 {
-                    Id = item.SubscriptionId,
-                    UserId = item.UserId,
-                    PlanId = item.PlanId,
-                    ExpirationDate = item.ExpirationDate,
+                    Id = subscription.SubscriptionId,
+                    UserId = subscription.UserId,
+                    PlanId = subscription.PlanId,
+                    ExpirationDate = subscription.ExpirationDate,
                 });
             }
 
             return listOfSubscriptions;
         }
 
-        public async Task DeleteSubscriptionByIdAsync(long id, CancellationToken cancellationToken)
+        public async Task DeleteSubscriptionByIdAsync(long planId, CancellationToken cancellationToken)
         {
-            await _subscriptionRepository.DeleteSubscriptionAsync(id);
+            var subscriptionEntity = await _subscriptionRepository.GetSubscriptionByIdAsync(planId);
+
+            await _subscriptionRepository.DeleteSubscriptionAsync(planId);
+
+            var planEntity = await _planRepository.GetPlanByIdAsync(planId);
+
+            var userEntity = await _userRepository.GetUserByIdAsync(subscriptionEntity.UserId);
+
+            if (subscriptionEntity != null && userEntity != null && planEntity != null)
+                await _messageService
+                        .SendAsync(General.EndpointNameReceiver,
+                            new SubscriptionNotificationCommand
+                            {
+                                Id = subscriptionEntity.SubscriptionId,
+                                PlanName = planEntity.Name,
+                                PlanPrice = planEntity.Price,
+                                UserEmail = userEntity.Email,
+                                UserName = userEntity.UserName,
+                                NotificationType = NotificationType.SubscriptionPlanDeactivated,
+                            });
         }
     }
 }

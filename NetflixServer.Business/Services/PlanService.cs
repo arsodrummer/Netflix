@@ -4,6 +4,7 @@ using NetflixServer.Business.Models.Responses;
 using NetflixServer.Resources.Repositories;
 using NetflixServer.Resources.Services;
 using NetflixServer.Shared;
+using NetflixServer.Shared.Commands;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -47,27 +48,32 @@ namespace NetflixServer.Business.Services
 
         public async Task<List<PlanByIdResponse>> GetPlanListAsync(CancellationToken cancellationToken)
         {
-            var res = await _planRepository.GetPlanListAsync();
+            var plans = await _planRepository.GetPlanListAsync();
 
             List<PlanByIdResponse> listOfPlans = new List<PlanByIdResponse>();
 
-            foreach (var item in res)
+            foreach (var plan in plans)
             {
                 listOfPlans.Add(new PlanByIdResponse
                 {
-                    PlanId = item.PlanId,
-                    Description = item.Description,
-                    Name = item.Name,
-                    Price = item.Price,
+                    PlanId = plan.PlanId,
+                    Description = plan.Description,
+                    Name = plan.Name,
+                    Price = plan.Price,
                 });
             }
 
             return listOfPlans;
         }
 
-        public async Task<PlanByIdResponse> UpdatePlanById(long planId, decimal price, CancellationToken cancellationToken)
+        public async Task<PlanByIdResponse> UpdatePlanById(long planId, long userId, decimal price, CancellationToken cancellationToken)
         {
             var planEntity = await _planRepository.GetPlanByIdAsync(planId);
+
+            var userEntity = await _userRepository.GetUserByIdAsync(userId);
+
+            if (userEntity == null)
+                return null;
 
             if (planEntity == null)
                 return null;
@@ -76,21 +82,17 @@ namespace NetflixServer.Business.Services
 
             await _planRepository.UpdatePlanByIdAsync(planEntity);
 
-            //{
-            //    await _messageService
-            //        .SendAsync(General.EndpointNameReceiver,
-            //            new NotificationCommand
-            //            {
-            //                Id = userEntity.UserId,
-            //                Email = userEntity.Email,
-            //                UserName = userEntity.UserName,
-            //                Active = userEntity.Active,
-            //                SubscriptionPlanPrice = planEntity.Price,
-            //                SubscriptionPlanDescription = planEntity.Description,
-            //                SubscriptionPlanName = planEntity.Name,
-            //                NotificationType = NotificationType.SubscriptionPlanUpdated,
-            //            });
-            //}
+            await _messageService
+                    .SendAsync(General.EndpointNameReceiver,
+                        new PlanNotificationCommand
+                        {
+                            Id = planId,
+                            PlanPrice = price,
+                            PlanName = planEntity.Name,
+                            UserEmail = userEntity.Email,
+                            UserName = userEntity.UserName,
+                            NotificationType = NotificationType.PlanPriceUpdated,
+                        });
 
             return new PlanByIdResponse
             {

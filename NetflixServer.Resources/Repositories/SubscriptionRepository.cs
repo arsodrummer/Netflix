@@ -38,6 +38,18 @@ namespace NetflixServer.Resources.Repositories
             }
         }
 
+        public async Task<SubscriptionEntity> GetSubscriptionByIdAsync(long planId)
+        {
+            try
+            {
+                return await _netflixDbService.GetFirstOrDefaultAsync<SubscriptionEntity>(new Sql($"SELECT * FROM SUBSCRIPTIONS WHERE ID = '{planId}'"));
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public async Task<IEnumerable<SubscriptionEntity>> GetSubscriptionListAsync()
         {
             try

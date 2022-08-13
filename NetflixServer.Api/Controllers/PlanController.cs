@@ -64,6 +64,7 @@ namespace NetflixServer.Controllers
         public async Task<IActionResult> PatchByIdAsync([FromBody] UpdatePlanByIdRequest updatePlanByIdRequest, [FromRoute] UpdatePlanByIdQuery updatePlanByIdQuery, CancellationToken cancellationToken)
         {
             var response = await _planService.UpdatePlanById(updatePlanByIdQuery.Id,
+                updatePlanByIdRequest.UserId,
                 updatePlanByIdRequest.Price,
                 cancellationToken);
 

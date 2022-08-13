@@ -15,6 +15,6 @@ namespace NetflixServer.Business.Interfaces
 
         Task<List<PlanByIdResponse>> GetPlanListAsync(CancellationToken cancellationToken);
 
-        Task<PlanByIdResponse> UpdatePlanById(long planId, decimal price, CancellationToken cancellationToken);
+        Task<PlanByIdResponse> UpdatePlanById(long planId, long userId, decimal price, CancellationToken cancellationToken);
     }
 }
