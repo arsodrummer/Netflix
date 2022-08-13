@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using NetflixServer.Shared;
+using NetflixServer.Shared.Commands;
 using NServiceBus;
 using System.Threading.Tasks;
 
@@ -27,7 +28,7 @@ namespace NetflixServer
 
                     var conventions = endpointConfiguration.Conventions();
                     //conventions.DefiningEventsAs(type => type.Namespace == typeof(EmailEvent).Namespace);
-                    conventions.DefiningCommandsAs(type => type.Namespace == typeof(NotificationCommand).Namespace);
+                    conventions.DefiningCommandsAs(type => type.Namespace == typeof(SubscriptionNotificationCommand).Namespace);
                     endpointConfiguration.RegisterComponents(registration: configureComponent =>
                     {
                         configureComponent.ConfigureComponent<IMessageSession>(_ => _endpointInstance, DependencyLifecycle.SingleInstance);

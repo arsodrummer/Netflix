@@ -5,25 +5,6 @@ namespace NetflixServer.NServiceBus.Services
 {
     public class NotificationContentService
     {
-        public (string Subject, string Body) CreateEmailContent(NotificationType notificationType, string userName, string? subscriptionPlanName, DateTime? expDate, decimal price)
-        {
-            switch (notificationType)
-            {
-                case NotificationType.UserCreated:
-                    return ("Wellcome to Netflix", $"Hello {userName}! You've recently created a Netflix account. See the link below to choose your subscription plan.");
-                case NotificationType.UserActivated:
-                    return ("Subscription plan activation", $"Dear {userName}! You've recently chosen '{subscriptionPlanName}' subscription plan. Activated until {expDate}");
-                case NotificationType.UserDeactivated:
-                    return ("User deactivated", $"Hi {userName}! Your acoount has been recently deactivated.");
-                case NotificationType.SubscriptionActivated:
-                    return ("Subscription plan update", $"Dear {userName}! Your subscription plan has been updated. Price: {price}, Expiration date: {expDate}");
-                case NotificationType.SubscriptionPlanExpired:
-                    return ("Subscription plan expirated", $"Dear {userName}! Your subscription plan will be expired on {expDate}. Choose another one or prolonged this one.");
-                default:
-                    return (string.Empty, string.Empty);
-            }
-        }
-
         public (string Subject, string Body) CreateUserEmailContent(NotificationType notificationType, string userName)
         {
             switch (notificationType)
@@ -48,7 +29,7 @@ namespace NetflixServer.NServiceBus.Services
             {
                 case NotificationType.PlanPriceUpdated:
                     return ("Price updated",
-                            $"Hi {userName}! The price for {planName} has been updated and now it's {planPrice}");
+                            $"Hi {userName}! The price for {planName} subscription plan has been updated and now it's {planPrice} USD per month.");
                 default:
                     return (string.Empty, string.Empty);
             }
@@ -59,10 +40,10 @@ namespace NetflixServer.NServiceBus.Services
             switch (notificationType)
             {
                 case NotificationType.SubscriptionActivated:
-                    return ("Subscription plan activarion",
-                            $"Hi {userName}! Your subscription plan {planName} with {planPrice} USD per month - has been activated until {string.Format("dd-MM-yyyy", expirationDate)}. Enjoy it!");
+                    return ("Subscription plan activation",
+                            $"Hi {userName}! Your subscription plan {planName} with {planPrice} USD per month - has been activated until {expirationDate:dd-MM-yyyy}. Enjoy it!");
                 case NotificationType.SubscriptionDeactivated:
-                    return ("Subscription plan deactivarion",
+                    return ("Subscription plan deactitarion",
                             $"Hi {userName}! Your subscription plan {planName} has been deactivated. Could you send us your decision why is it so?");
                 default:
                     return (string.Empty, string.Empty);
@@ -71,6 +52,6 @@ namespace NetflixServer.NServiceBus.Services
 
         public (string Subject, string Body) CreateSubscriptionExpiredEmailContent(string userName, DateTime expirationDate) =>
             ("Subscription expiration",
-            $"Hi {userName}! We'd like to notify you that your subscription will be expired on {string.Format("dd-MM-yyyy", expirationDate)}.");
+            $"Hi {userName}! We'd like to notify you that your subscription will be expired on {expirationDate:dd-MM-yyyy}.");
     }
 }

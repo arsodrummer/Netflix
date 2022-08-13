@@ -6,6 +6,6 @@ namespace NetflixServer.NServiceBus.Sagas.SagaDatas
     {
         public string CorrelationId { get; set; }
 
-        public bool SubscriptionActivated { get; set; }
+        public bool FinishSaga { get; set; }
     }
 }

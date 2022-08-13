@@ -18,9 +18,15 @@ namespace NetflixServer.Business.Services
         public PlanRepository _planRepository;
         public MessageService _messageService;
 
-        public SubscriptionService(SubscriptionRepository subscriptionRepository)
+        public SubscriptionService(SubscriptionRepository subscriptionRepository,
+            PlanRepository planRepository,
+            UserRepository userRepository,
+            MessageService messageService)
         {
             _subscriptionRepository = subscriptionRepository;
+            _planRepository = planRepository;
+            _userRepository = userRepository;
+            _messageService = messageService;
         }
 
         public async Task CreateSubscriptionAsync(long userId, long planId, DateTime expirationDate, CancellationToken cancellationToken)

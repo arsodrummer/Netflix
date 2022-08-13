@@ -5,6 +5,7 @@ using Microsoft.Extensions.Hosting;
 using NetflixServer.NServiceBus.Services;
 using NetflixServer.Resources.Services;
 using NetflixServer.Shared;
+using NetflixServer.Shared.Commands;
 using NServiceBus;
 using NServiceBus.Persistence.Sql;
 
@@ -37,7 +38,7 @@ namespace NetflixServer.NServiceBus
 
                 var conventions = endpointConfiguration.Conventions();
                 //conventions.DefiningEventsAs(type => type.Name == typeof(SendEmailCommand).Name);
-                conventions.DefiningCommandsAs(type => type.Namespace == typeof(NotificationCommand).Namespace);
+                conventions.DefiningCommandsAs(type => type.Namespace == typeof(SubscriptionNotificationCommand).Namespace);
                 endpointConfiguration.RegisterComponents(registration: configureComponent =>
                 {
                     configureComponent.ConfigureComponent<IMessageSession>(_ => _endpointInstance, DependencyLifecycle.SingleInstance);
@@ -51,7 +52,7 @@ namespace NetflixServer.NServiceBus
                 transport.UseSchemaForQueue(General.EndpointNameSender, "sender");
                 transport.Transactions(TransportTransactionMode.SendsAtomicWithReceive);
 
-                transport.Routing().RouteToEndpoint(typeof(NotificationCommand), General.EndpointNameSender);
+                transport.Routing().RouteToEndpoint(typeof(SubscriptionNotificationCommand), General.EndpointNameSender);
 
                 var persistence = endpointConfiguration.UsePersistence<SqlPersistence>();
                 var dialect = persistence.SqlDialect<SqlDialect.MsSqlServer>();

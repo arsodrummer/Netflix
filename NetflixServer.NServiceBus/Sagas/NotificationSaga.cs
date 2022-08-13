@@ -1,11 +1,12 @@
 ﻿using NetflixServer.NServiceBus.Sagas.SagaDatas;
 using NetflixServer.NServiceBus.Services;
-using NetflixServer.Shared.Email;
+using NetflixServer.NServiceBus.Timeouts;
 using NetflixServer.Shared;
+using NetflixServer.Shared.Commands;
+using NetflixServer.Shared.Email;
 using NServiceBus;
 using System;
 using System.Threading.Tasks;
-using NetflixServer.Shared.Commands;
 
 namespace NetflixServer.NServiceBus.Sagas
 {
@@ -14,7 +15,7 @@ namespace NetflixServer.NServiceBus.Sagas
                     IAmStartedByMessages<PlanNotificationCommand>,
                     IAmStartedByMessages<SubscriptionNotificationCommand>,
                     IHandleMessages<SendEmailResponse>,
-                    IHandleTimeouts<SubscriptionNotificationCommand>
+                    IHandleTimeouts<SubscriptionTimeout>
     {
         private readonly NotificationContentService _notificationContentService;
 
@@ -33,6 +34,7 @@ namespace NetflixServer.NServiceBus.Sagas
 
         public async Task Handle(UserNotificationCommand message, IMessageHandlerContext context)
         {
+            Data.FinishSaga = true;
             (string subject, string body) = _notificationContentService.CreateUserEmailContent(message.NotificationType, message.UserName);
 
             var sendEmailCommand = new SendEmailCommand
@@ -47,6 +49,7 @@ namespace NetflixServer.NServiceBus.Sagas
 
         public async Task Handle(PlanNotificationCommand message, IMessageHandlerContext context)
         {
+            Data.FinishSaga = true;
             (string subject, string body) = _notificationContentService.CreatePlanEmailContent(message.NotificationType, message.UserName, message.PlanName, message.PlanPrice);
 
             var sendEmailCommand = new SendEmailCommand
@@ -61,9 +64,7 @@ namespace NetflixServer.NServiceBus.Sagas
 
         public async Task Handle(SubscriptionNotificationCommand message, IMessageHandlerContext context)
         {
-            if (message.NotificationType == NotificationType.SubscriptionActivated)
-                Data.SubscriptionActivated = true;
-
+            Data.FinishSaga = true;
             (string subject, string body) = _notificationContentService.CreateSubscriptionEmailContent(message.NotificationType, message.UserName, message.PlanName, message.PlanPrice, message.ExpirationDate);
 
             var sendEmailCommand = new SendEmailCommand
@@ -77,19 +78,23 @@ namespace NetflixServer.NServiceBus.Sagas
 
             if (message.NotificationType == NotificationType.SubscriptionActivated)
             {
-                await RequestTimeout(context, message.ExpirationDate.AddDays(-10)/*TimeSpan.FromSeconds(2)*/, message);
-                await RequestTimeout(context, message.ExpirationDate.AddDays(-3)/*TimeSpan.FromSeconds(2)*/, message);
-                await RequestTimeout(context, message.ExpirationDate.AddDays(-1)/*TimeSpan.FromSeconds(2)*/, message);
+                Data.FinishSaga = false;
+                var timeoutMessage = new SubscriptionTimeout
+                {
+                    ExpirationDate = message.ExpirationDate,
+                    UserEmail = message.UserEmail,
+                    UserName = message.UserName,
+                };
+
+                await RequestTimeout(context, DateTime.SpecifyKind(/*message.ExpirationDate.AddSeconds(-10)*/DateTime.Now.AddSeconds(20), DateTimeKind.Local), timeoutMessage);
+                await RequestTimeout(context, DateTime.SpecifyKind(/*message.ExpirationDate.AddSeconds(-3)*/DateTime.Now.AddSeconds(40), DateTimeKind.Local), timeoutMessage);
+                timeoutMessage.IsLastNotification = true;
+                await RequestTimeout(context, DateTime.SpecifyKind(/*message.ExpirationDate.AddSeconds(-1)*/DateTime.Now.AddSeconds(60), DateTimeKind.Local), timeoutMessage);
             }
         }
 
-        public async Task Timeout(SubscriptionNotificationCommand state, IMessageHandlerContext context)
+        public async Task Timeout(SubscriptionTimeout state, IMessageHandlerContext context)
         {
-            //if (Data.SubscriptionActivated)
-            //{
-            //    return ReplyToOriginator(context, state);
-            //}
-
             (string subject, string body) = _notificationContentService.CreateSubscriptionExpiredEmailContent(state.UserName, state.ExpirationDate);
 
             var sendEmailCommand = new SendEmailCommand
@@ -100,11 +105,16 @@ namespace NetflixServer.NServiceBus.Sagas
             };
 
             await context.SendLocal(sendEmailCommand);
+
+            if (state.IsLastNotification)
+                MarkAsComplete();
         }
 
         public Task Handle(SendEmailResponse message, IMessageHandlerContext context)
         {
-            MarkAsComplete();
+            if (Data.FinishSaga)
+                MarkAsComplete();
+            
             return Task.CompletedTask;
         }
     }
