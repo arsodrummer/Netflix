@@ -59,7 +59,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"price\" : 5\r\n}",
+							"raw": "{\r\n    \"userId\": 1,\r\n    \"price\" : 5\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
