@@ -41,7 +41,8 @@ namespace NetflixServer.Business.Services
                                 PlanPrice = planEntity.Price,
                                 UserEmail = userEntity.Email,
                                 UserName = userEntity.UserName,
-                                NotificationType = NotificationType.SubscriptionPlanActivated,
+                                ExpirationDate = expirationDate,
+                                NotificationType = NotificationType.SubscriptionActivated,
                             });
         }
 
@@ -85,7 +86,7 @@ namespace NetflixServer.Business.Services
                                 PlanPrice = planEntity.Price,
                                 UserEmail = userEntity.Email,
                                 UserName = userEntity.UserName,
-                                NotificationType = NotificationType.SubscriptionPlanDeactivated,
+                                NotificationType = NotificationType.SubscriptionDeactivated,
                             });
         }
     }

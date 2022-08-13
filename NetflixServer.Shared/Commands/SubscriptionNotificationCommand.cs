@@ -1,4 +1,6 @@
-﻿namespace NetflixServer.Shared.Commands
+﻿using System;
+
+namespace NetflixServer.Shared.Commands
 {
     public class SubscriptionNotificationCommand
     {
@@ -13,5 +15,7 @@
         public string UserName { get; set; }
 
         public NotificationType NotificationType { get; set; }
+
+        public DateTime ExpirationDate { get; set; }
     }
 }

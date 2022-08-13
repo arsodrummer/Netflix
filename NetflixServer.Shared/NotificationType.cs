@@ -6,8 +6,8 @@
         UserActivated,
         UserDeactivated,
         PlanPriceUpdated,
-        SubscriptionPlanActivated,
-        SubscriptionPlanDeactivated,
+        SubscriptionActivated,
+        SubscriptionDeactivated,
         SubscriptionPlanExpired
     }
 }
