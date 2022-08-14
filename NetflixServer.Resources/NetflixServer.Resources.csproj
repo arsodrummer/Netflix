@@ -10,6 +10,7 @@
 		<PackageReference Include="PetaPoco.Compiled" Version="6.0.480" />
 		<PackageReference Include="System.Data.SqlClient" Version="4.8.0" />
 		<PackageReference Include="NServiceBus" Version="7.5.0" />
+		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="6.0.0" />
 	</ItemGroup>
 	
 </Project>

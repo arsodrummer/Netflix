@@ -86,10 +86,10 @@ namespace NetflixServer.NServiceBus.Sagas
                     UserName = message.UserName,
                 };
 
-                await RequestTimeout(context, DateTime.SpecifyKind(/*message.ExpirationDate.AddSeconds(-10)*/DateTime.Now.AddSeconds(20), DateTimeKind.Local), timeoutMessage);
-                await RequestTimeout(context, DateTime.SpecifyKind(/*message.ExpirationDate.AddSeconds(-3)*/DateTime.Now.AddSeconds(40), DateTimeKind.Local), timeoutMessage);
+                await RequestTimeout(context, DateTime.SpecifyKind(/*message.ExpirationDate.AddDays(-10)*/DateTime.Now.AddSeconds(20), DateTimeKind.Local), timeoutMessage);
+                await RequestTimeout(context, DateTime.SpecifyKind(/*message.ExpirationDate.AddDays(-3)*/DateTime.Now.AddSeconds(40), DateTimeKind.Local), timeoutMessage);
                 timeoutMessage.IsLastNotification = true;
-                await RequestTimeout(context, DateTime.SpecifyKind(/*message.ExpirationDate.AddSeconds(-1)*/DateTime.Now.AddSeconds(60), DateTimeKind.Local), timeoutMessage);
+                await RequestTimeout(context, DateTime.SpecifyKind(/*message.ExpirationDate.AddDays(-1)*/DateTime.Now.AddSeconds(60), DateTimeKind.Local), timeoutMessage);
             }
         }
 

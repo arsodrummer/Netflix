@@ -37,7 +37,6 @@ namespace NetflixServer.NServiceBus
                 endpointConfiguration.EnableInstallers();
 
                 var conventions = endpointConfiguration.Conventions();
-                //conventions.DefiningEventsAs(type => type.Name == typeof(SendEmailCommand).Name);
                 conventions.DefiningCommandsAs(type => type.Namespace == typeof(SubscriptionNotificationCommand).Namespace);
                 endpointConfiguration.RegisterComponents(registration: configureComponent =>
                 {
@@ -59,7 +58,6 @@ namespace NetflixServer.NServiceBus
                 dialect.Schema(schemaName);
                 persistence.ConnectionBuilder(() => new SqlConnection(connection));
 
-                //endpointConfiguration.DefineCriticalErrorAction(OnCriticalError);
                 SqlHelper.CreateSchema(connection, "receiver");
 
                 return endpointConfiguration;
