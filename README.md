@@ -13,6 +13,11 @@ The database can be deployed in [Docker](https://hub.docker.com/_/microsoft-mssq
 
 As a SMTP server localy you should use [smtp4dev](https://github.com/rnwood/smtp4dev) tool.
 
+**Flow**
+
+![Netflix_flow](https://user-images.githubusercontent.com/16143411/184550959-2132f539-2adc-434b-8f66-b3fffa60699e.png)
+
+
 **DbUp**
 
 After you've set up your database localy you should create some useful tables there. Set the DbUp project as the Startup project, then build it and run. 
