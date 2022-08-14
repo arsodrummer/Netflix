@@ -1,0 +1,29 @@
+title Netflix subscription notification flow
+
+UI->API:POST User
+API->API:Save User to DB
+API->NServiceBus:Send UserNotificationCommand
+actor User
+NServiceBus->User:Send email (user created)
+
+UI->API:PATCH Plan/{id} (price update)
+API->API:Save new price to DB
+API->NServiceBus:Send PlanNotificationCommand
+NServiceBus->User:Send email (new price)
+
+UI->API:POST Subscription/{id} (expirationDate update)
+API->API:Save expirationDate to DB
+API->NServiceBus:Send SubscriptionNotificationCommand
+NServiceBus->User:Send email (new expirationDate)
+
+NServiceBus->NServiceBus:NotificationTimeout #1 (10 days before expiration)
+NServiceBus->User:Send email (subscription will be expired in 10 days)
+
+NServiceBus->NServiceBus:NotificationTimeout #2 (3 days before expiration)
+NServiceBus->User:Send email (subscription will be expired in 3 days)
+
+NServiceBus->NServiceBus:NotificationTimeout #3 (1 days before expiration)
+NServiceBus->User:Send email (subscription will be expired in 1 days)
+NServiceBus->API: DELETE Subscription/{id}
+API->NServiceBus:Send SubscriptionNotificationCommand
+NServiceBus->User:Send email (subscription was deactivated)
