@@ -78,7 +78,7 @@ namespace NetflixServer.Business.Services
 
             await _subscriptionRepository.DeleteSubscriptionAsync(planId);
 
-            var planEntity = await _planRepository.GetPlanByIdAsync(planId);
+            var planEntity = await _planRepository.GetPlanByIdAsync(subscriptionEntity.PlanId);
 
             var userEntity = await _userRepository.GetUserByIdAsync(subscriptionEntity.UserId);
 

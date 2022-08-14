@@ -1,4 +1,6 @@
-﻿using NetflixServer.NServiceBus.Sagas.SagaDatas;
+﻿using NetflixServer.Business.Interfaces;
+using NetflixServer.Business.Services;
+using NetflixServer.NServiceBus.Sagas.SagaDatas;
 using NetflixServer.NServiceBus.Services;
 using NetflixServer.NServiceBus.Timeouts;
 using NetflixServer.Shared;
@@ -18,10 +20,12 @@ namespace NetflixServer.NServiceBus.Sagas
                     IHandleTimeouts<SubscriptionTimeout>
     {
         private readonly NotificationContentService _notificationContentService;
+        private readonly ISubscriptionService _subscriptionService;
 
-        public NotificationSaga(NotificationContentService notificationContentService)
+        public NotificationSaga(NotificationContentService notificationContentService, ISubscriptionService subscriptionService)
         {
             _notificationContentService = notificationContentService;
+            _subscriptionService = subscriptionService;
         }
 
         protected override void ConfigureHowToFindSaga(SagaPropertyMapper<NotificationSagaData> mapper)
@@ -81,6 +85,7 @@ namespace NetflixServer.NServiceBus.Sagas
                 Data.FinishSaga = false;
                 var timeoutMessage = new SubscriptionTimeout
                 {
+                    SubscriptionId = message.Id,
                     ExpirationDate = message.ExpirationDate,
                     UserEmail = message.UserEmail,
                     UserName = message.UserName,
@@ -107,7 +112,10 @@ namespace NetflixServer.NServiceBus.Sagas
             await context.SendLocal(sendEmailCommand);
 
             if (state.IsLastNotification)
+            {
+                await _subscriptionService.DeleteSubscriptionByIdAsync(state.SubscriptionId, new System.Threading.CancellationToken());
                 MarkAsComplete();
+            }
         }
 
         public Task Handle(SendEmailResponse message, IMessageHandlerContext context)

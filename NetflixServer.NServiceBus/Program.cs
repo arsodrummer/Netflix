@@ -2,12 +2,19 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using NetflixServer.Business.Interfaces;
+using NetflixServer.Business.Services;
 using NetflixServer.NServiceBus.Services;
+using NetflixServer.Resources.Repositories;
 using NetflixServer.Resources.Services;
 using NetflixServer.Shared;
 using NetflixServer.Shared.Commands;
 using NServiceBus;
 using NServiceBus.Persistence.Sql;
+using PetaPoco;
+using PetaPoco.Providers;
+using System.Data;
 
 [assembly: SqlPersistenceSettings(
     MsSqlServerScripts = true)]
@@ -17,6 +24,7 @@ namespace NetflixServer.NServiceBus
     public class Program
     {
         private static IEndpointInstance _endpointInstance;
+        private static string _connection;
 
         public static void Main(string[] args)
         {
@@ -30,7 +38,7 @@ namespace NetflixServer.NServiceBus
             builder.UseNServiceBus(ctx =>
             {
                 IConfiguration configuration = ctx.Configuration;
-                var connection = configuration.GetConnectionString("DefaultConnection");
+                _connection = configuration.GetConnectionString("DefaultConnection");
                 var endpointConfiguration = new EndpointConfiguration(General.EndpointNameReceiver);
                 endpointConfiguration.SendFailedMessagesTo("error");
                 endpointConfiguration.AuditProcessedMessagesTo("audit");
@@ -44,7 +52,7 @@ namespace NetflixServer.NServiceBus
                 });
 
                 var transport = endpointConfiguration.UseTransport<SqlServerTransport>();
-                transport.ConnectionString(connection);
+                transport.ConnectionString(_connection);
                 transport.DefaultSchema(schemaName);
                 transport.UseSchemaForQueue("error", "dbo");
                 transport.UseSchemaForQueue("audit", "dbo");
@@ -56,9 +64,9 @@ namespace NetflixServer.NServiceBus
                 var persistence = endpointConfiguration.UsePersistence<SqlPersistence>();
                 var dialect = persistence.SqlDialect<SqlDialect.MsSqlServer>();
                 dialect.Schema(schemaName);
-                persistence.ConnectionBuilder(() => new SqlConnection(connection));
+                persistence.ConnectionBuilder(() => new SqlConnection(_connection));
 
-                SqlHelper.CreateSchema(connection, "receiver");
+                SqlHelper.CreateSchema(_connection, "receiver");
 
                 return endpointConfiguration;
             });
@@ -68,6 +76,29 @@ namespace NetflixServer.NServiceBus
                 services.AddLogging();
                 services.AddSingleton<NotificationContentService>();
                 services.AddSingleton<EmailService>();
+                services.AddSingleton<SubscriptionRepository>();
+                services.AddTransient<UserRepository>();
+                services
+                    .AddTransient<MessageService>()
+                    .AddTransient<PlanRepository>()
+                    .AddTransient<SubscriptionRepository>()
+                    .AddTransient<NetflixDbService>(sp =>
+                    {
+                        var database = sp.GetService<IDatabaseBuildConfiguration>()
+                            .UsingConnectionString(_connection)
+                            .Create();
+
+                        return new NetflixDbService(database);
+                    });
+                services.AddSingleton<IDatabaseBuildConfiguration>(sp =>
+                {
+                    var logger = sp.GetService<ILogger<DatabaseConfiguration>>();
+                    return DatabaseConfiguration.Build()
+                        .UsingProvider<SqlServerDatabaseProvider>()
+                        .UsingIsolationLevel(IsolationLevel.ReadCommitted)
+                        .UsingCommandExecuted((sender, args) => { logger.LogInformation($"{args.Command.CommandText}"); });
+                });
+                services.AddScoped<ISubscriptionService, SubscriptionService>();
             });
         }
     }
