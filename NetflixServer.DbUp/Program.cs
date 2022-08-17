@@ -11,7 +11,7 @@ namespace NetflixServer.DbUp
         {
             var connectionString =
                 args.FirstOrDefault()
-                ?? "Server=localhost,1433;Initial Catalog=master;User ID=sa;Password=_Netflix_123456;MultipleActiveResultSets=True;Connection Timeout=30;";
+                ?? "Data Source=localhost;Initial Catalog=master;Integrated Security=True;Persist Security Info=False;Pooling=False;MultipleActiveResultSets=False;Encrypt=False;TrustServerCertificate=False";
             EnsureDatabase.For.SqlDatabase(connectionString);
 
             var upgrader =
