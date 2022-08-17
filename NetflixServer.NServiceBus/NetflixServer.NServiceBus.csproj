@@ -26,7 +26,6 @@
 	<ItemGroup>
 		<ProjectReference Include="..\NetflixServer.Business\NetflixServer.Business.csproj" />
 		<ProjectReference Include="..\NetflixServer.Resources\NetflixServer.Resources.csproj" />
-		<ProjectReference Include="..\NetflixServer.Shared\NetflixServer.Shared.csproj" />
 	</ItemGroup>
 
 </Project>
