@@ -1,4 +1,4 @@
-# NServiceBus + .NET Core
+# Messaging features based on NServiceBus + .NET Core
 ![image](https://user-images.githubusercontent.com/16143411/184549524-91da71bb-1c37-4860-a918-1a494a5e7934.png)
 
 **Intro**
@@ -9,7 +9,7 @@ The main idea of this project is to show how to use Sagas and Timeouts closely t
 
 We have a simple API that allows us to manipulate with Users, Plans and Subscriptions by using [Postman](https://www.postman.com/).
 
-The database can be deployed in [Docker](https://hub.docker.com/_/microsoft-mssql-server) container.
+The database should be deployed in MS SQL.
 
 As a SMTP server localy you should use [smtp4dev](https://github.com/rnwood/smtp4dev) tool.
 
