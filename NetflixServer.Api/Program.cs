@@ -27,7 +27,6 @@ namespace NetflixServer
                     endpointConfiguration.EnableInstallers();
 
                     var conventions = endpointConfiguration.Conventions();
-                    //conventions.DefiningEventsAs(type => type.Namespace == typeof(EmailEvent).Namespace);
                     conventions.DefiningCommandsAs(type => type.Namespace == typeof(SubscriptionNotificationCommand).Namespace);
                     endpointConfiguration.RegisterComponents(registration: configureComponent =>
                     {
