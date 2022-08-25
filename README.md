@@ -1,4 +1,4 @@
-# Messaging features based on NServiceBus + .NET Core WEB API
+# Messaging features based on NServiceBus + WEB API (.NET Core)
 ![image](https://user-images.githubusercontent.com/16143411/184549524-91da71bb-1c37-4860-a918-1a494a5e7934.png)
 
 **Intro**
