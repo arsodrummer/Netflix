@@ -1,5 +1,4 @@
 ﻿using NetflixServer.Business.Interfaces;
-using NetflixServer.Business.Services;
 using NetflixServer.NServiceBus.Sagas.SagaDatas;
 using NetflixServer.NServiceBus.Services;
 using NetflixServer.NServiceBus.Timeouts;
@@ -16,6 +15,7 @@ namespace NetflixServer.NServiceBus.Sagas
                     IAmStartedByMessages<UserNotificationCommand>,
                     IAmStartedByMessages<PlanNotificationCommand>,
                     IAmStartedByMessages<SubscriptionNotificationCommand>,
+                    IHandleMessages<CreateUserEmailContentResponse>,
                     IHandleMessages<SendEmailResponse>,
                     IHandleTimeouts<SubscriptionTimeout>
     {
@@ -39,13 +39,24 @@ namespace NetflixServer.NServiceBus.Sagas
         public async Task Handle(UserNotificationCommand message, IMessageHandlerContext context)
         {
             Data.FinishSaga = true;
-            (string subject, string body) = _notificationContentService.CreateUserEmailContent(message.NotificationType, message.UserName);
 
+            var createUserEmailContentCommand = new CreateUserEmailContentCommand
+            {
+                NotificationType = message.NotificationType,
+                UserName = message.UserName,
+                Email = message.Email,
+            };
+
+            await context.SendLocal(createUserEmailContentCommand);
+        }
+
+        public async Task Handle(CreateUserEmailContentResponse message, IMessageHandlerContext context)
+        {
             var sendEmailCommand = new SendEmailCommand
             {
                 EmailAddress = message.Email,
-                Body = body,
-                Subject = subject,
+                Body = message.Body,
+                Subject = message.Subject,
             };
 
             await context.SendLocal(sendEmailCommand);
