@@ -31,11 +31,15 @@ namespace NetflixServer.Business.Services
 
         public async Task CreateSubscriptionAsync(long userId, long planId, DateTime expirationDate, CancellationToken cancellationToken)
         {
-            var subscriptionId = await _subscriptionRepository.InsertSubscriptionAsync(userId, planId, expirationDate);
+            var insertSubscriptionTask = _subscriptionRepository.InsertSubscriptionAsync(userId, planId, expirationDate);
+            var getPlanByIdTask = _planRepository.GetPlanByIdAsync(planId);
+            var getUserByIdTask = _userRepository.GetUserByIdAsync(userId);
 
-            var planEntity = await _planRepository.GetPlanByIdAsync(planId);
+            await Task.WhenAll(insertSubscriptionTask, getPlanByIdTask, getUserByIdTask);
 
-            var userEntity = await _userRepository.GetUserByIdAsync(userId);
+            var subscriptionId = await insertSubscriptionTask;
+            var planEntity = await getPlanByIdTask;
+            var userEntity = await getUserByIdTask;
 
             if (userEntity != null && planEntity != null)
                 await _messageService
@@ -78,9 +82,13 @@ namespace NetflixServer.Business.Services
 
             await _subscriptionRepository.DeleteSubscriptionAsync(planId);
 
-            var planEntity = await _planRepository.GetPlanByIdAsync(subscriptionEntity.PlanId);
+            var getPlanByIdTask = _planRepository.GetPlanByIdAsync(subscriptionEntity.PlanId);
+            var getUserByIdTask = _userRepository.GetUserByIdAsync(subscriptionEntity.UserId);
 
-            var userEntity = await _userRepository.GetUserByIdAsync(subscriptionEntity.UserId);
+            await Task.WhenAll(getPlanByIdTask, getUserByIdTask);
+
+            var planEntity = await getPlanByIdTask;
+            var userEntity = await getUserByIdTask;
 
             if (subscriptionEntity != null && userEntity != null && planEntity != null)
                 await _messageService

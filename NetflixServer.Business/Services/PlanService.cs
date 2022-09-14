@@ -68,9 +68,13 @@ namespace NetflixServer.Business.Services
 
         public async Task<PlanByIdResponse> UpdatePlanById(long planId, long userId, decimal price, CancellationToken cancellationToken)
         {
-            var planEntity = await _planRepository.GetPlanByIdAsync(planId);
+            var getPlanByIdTask = _planRepository.GetPlanByIdAsync(planId);
+            var getUserByIdTask = _userRepository.GetUserByIdAsync(userId);
 
-            var userEntity = await _userRepository.GetUserByIdAsync(userId);
+            await Task.WhenAll(getPlanByIdTask, getUserByIdTask);
+
+            var planEntity = await getPlanByIdTask;
+            var userEntity = await getUserByIdTask;
 
             if (userEntity == null)
                 return null;
