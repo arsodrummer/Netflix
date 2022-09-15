@@ -12,11 +12,11 @@ namespace NetflixServer.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class UserController : ControllerBase
+    public class UsersController : ControllerBase
     {
         private IUserService _userService;
 
-        public UserController(IUserService subscriptionService)
+        public UsersController(IUserService subscriptionService)
         {
             _userService = subscriptionService;
         }
@@ -44,9 +44,8 @@ namespace NetflixServer.Controllers
         }
 
         [HttpGet]
-        [Route("List")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetListAsync(CancellationToken cancellationToken)
+        public async Task<IActionResult> GetAsync(CancellationToken cancellationToken)
         {
             var response = await _userService.GetUserListAsync(cancellationToken);
 

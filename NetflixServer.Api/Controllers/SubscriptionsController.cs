@@ -11,11 +11,11 @@ namespace NetflixServer.Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class SubscriptionController : ControllerBase
+    public class SubscriptionsController : ControllerBase
     {
         private ISubscriptionService _subscriptionService;
 
-        public SubscriptionController(ISubscriptionService subscriptionService)
+        public SubscriptionsController(ISubscriptionService subscriptionService)
         {
             _subscriptionService = subscriptionService;
         }
@@ -30,9 +30,8 @@ namespace NetflixServer.Api.Controllers
         }
 
         [HttpGet]
-        [Route("List")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetListAsync(CancellationToken cancellationToken)
+        public async Task<IActionResult> GetAsync(CancellationToken cancellationToken)
         {
             var response = await _subscriptionService.GetSubscriptionListAsync(cancellationToken);
 

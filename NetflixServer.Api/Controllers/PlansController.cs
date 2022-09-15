@@ -4,7 +4,6 @@ using NetflixServer.Api.Mapper;
 using NetflixServer.Api.Models.Queries;
 using NetflixServer.Api.Models.Requests;
 using NetflixServer.Business.Interfaces;
-using NetflixServer.Business.Models.Responses;
 using NetflixServer.Models.Queries;
 using NetflixServer.Models.Requests;
 using System.Threading;
@@ -14,11 +13,11 @@ namespace NetflixServer.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class PlanController : ControllerBase
+    public class PlansController : ControllerBase
     {
         private IPlanService _planService;
 
-        public PlanController(IPlanService planService)
+        public PlansController(IPlanService planService)
         {
             _planService = planService;
         }
@@ -46,9 +45,8 @@ namespace NetflixServer.Controllers
         }
 
         [HttpGet]
-        [Route("List")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetListAsync(CancellationToken cancellationToken)
+        public async Task<IActionResult> GetAsync(CancellationToken cancellationToken)
         {
             var response = await _planService.GetPlanListAsync(cancellationToken);
 

@@ -23,12 +23,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/Plan",
+							"raw": "{{BASE_URL}}/Plans",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
-								"Plan"
+								"Plans"
 							]
 						}
 					},
@@ -40,13 +40,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{BASE_URL}}/Plan/List",
+							"raw": "{{BASE_URL}}/Plans",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
-								"Plan",
-								"List"
+								"Plans"
 							]
 						}
 					},
@@ -59,7 +58,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"userId\": 1,\r\n    \"price\" : 5\r\n}",
+							"raw": "{\r\n    \"userId\": 4,\r\n    \"price\" : 5\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -67,12 +66,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/Plan/1",
+							"raw": "{{BASE_URL}}/Plans/1",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
-								"Plan",
+								"Plans",
 								"1"
 							]
 						}
@@ -99,12 +98,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/User",
+							"raw": "{{BASE_URL}}/Users",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
-								"User"
+								"Users"
 							]
 						}
 					},
@@ -116,12 +115,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{BASE_URL}}/User/4",
+							"raw": "{{BASE_URL}}/Users/4",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
-								"User",
+								"Users",
 								"4"
 							]
 						}
@@ -134,13 +133,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{BASE_URL}}/User/List",
+							"raw": "{{BASE_URL}}/Users",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
-								"User",
-								"List"
+								"Users"
 							]
 						}
 					},
@@ -161,12 +159,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/User/1",
+							"raw": "{{BASE_URL}}/Users/1",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
-								"User",
+								"Users",
 								"1"
 							]
 						}
@@ -185,7 +183,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"userId\": 4,\r\n    \"planId\": 2,\r\n    \"expirationDate\":\"2022-01-01\"\r\n}",
+							"raw": "{\r\n    \"userId\": 4,\r\n    \"planId\": 2,\r\n    \"expirationDate\":\"2022-08-14\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -193,12 +191,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/Subscription",
+							"raw": "{{BASE_URL}}/Subscriptions",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
-								"Subscription"
+								"Subscriptions"
 							]
 						}
 					},
@@ -210,12 +208,12 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{BASE_URL}}/Subscription/1",
+							"raw": "{{BASE_URL}}/Subscriptions/1",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
-								"Subscription",
+								"Subscriptions",
 								"1"
 							]
 						}
@@ -228,13 +226,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{BASE_URL}}/Subscription/List",
+							"raw": "{{BASE_URL}}/Subscriptions",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
-								"Subscription",
-								"List"
+								"Subscriptions"
 							]
 						}
 					},
