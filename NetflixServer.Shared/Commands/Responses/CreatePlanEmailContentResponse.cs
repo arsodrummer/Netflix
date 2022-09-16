@@ -1,4 +1,4 @@
-﻿namespace NetflixServer.Shared
+﻿namespace NetflixServer.Shared.Commands.Responses
 {
     public class CreatePlanEmailContentResponse
     {

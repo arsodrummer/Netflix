@@ -1,6 +1,6 @@
 ﻿using NetflixServer.NServiceBus.Services;
-using NetflixServer.Shared;
 using NetflixServer.Shared.Commands;
+using NetflixServer.Shared.Commands.Responses;
 using NServiceBus;
 using System.Threading.Tasks;
 

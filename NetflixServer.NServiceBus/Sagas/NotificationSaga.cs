@@ -4,6 +4,7 @@ using NetflixServer.NServiceBus.Services;
 using NetflixServer.NServiceBus.Timeouts;
 using NetflixServer.Shared;
 using NetflixServer.Shared.Commands;
+using NetflixServer.Shared.Commands.Responses;
 using NetflixServer.Shared.Email;
 using NServiceBus;
 using System;

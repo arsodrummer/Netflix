@@ -1,6 +1,6 @@
-﻿namespace NetflixServer.Shared
+﻿namespace NetflixServer.Shared.Commands.Responses
 {
-    public class CreateUserEmailContentResponse
+    public class CreateSubscriptionEmailContentResponse
     {
         public string Subject { get; set; }
 
