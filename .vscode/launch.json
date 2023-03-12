@@ -1,0 +1,44 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Netflix Api",
+            "type": "clr",
+            "preLaunchTask": "build_api",
+            "request": "launch",
+            "program": "C:/Program Files/IIS Express/iisexpress.exe",
+            "args": [
+                "/path:${workspaceFolder}\\NetflixServer.Api",
+                "/port:60000"
+            ],
+            "logging": {
+                "moduleLoad": false
+            },
+            "console": "externalTerminal"
+        },
+        {
+            "name": "Netflix NServiceBus",
+            "type": "coreclr",
+            "preLaunchTask": "build_bus",
+            "request": "launch",
+            "suppressMultipleSessionWarning": true,
+            "program": "${workspaceFolder}/NetflixServer.NServiceBus/bin/NetflixServer.NServiceBus.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/NetflixServer.NServiceBus",
+            "console": "externalTerminal",
+            "logging": {
+                "moduleLoad": false
+            }
+        }
+    ],
+    "compounds": [
+        {
+            "name": "Netflix Api and NServiceBus",
+            "configurations": [
+                "Netflix Api",
+                "Netflix NServiceBus"
+            ],
+            "stopAll": true
+        }
+    ]
+}
